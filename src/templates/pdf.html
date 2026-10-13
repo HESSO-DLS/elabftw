@@ -169,6 +169,13 @@
   </section>
 {% endif %}
 
+{% if whiteboardPreview %}
+  <section class='no-break'>
+    <h3>{{ 'Whiteboard'|trans }}</h3>
+    <img class='whiteboard-image' src='data:image/png;base64,{{ whiteboardPreview }}' alt='{{ 'Whiteboard'|trans }}' />
+  </section>
+{% endif %}
+
 {% if entityData.steps %}
   <section class='no-break'>
     <h3>{{ 'Steps'|trans }}</h3>

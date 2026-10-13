@@ -147,6 +147,7 @@ enum Model {
   Upload = 'uploads',
   User = 'users',
   User2Team = 'user2team',
+  Whiteboard = 'whiteboard',
 }
 
 enum LinkSubModel {
@@ -201,7 +202,6 @@ enum Target {
 enum FileType {
   Csv = 'csv',
   Eln = 'eln',
-  Excalidraw = 'excalidraw',
   Html = 'html',
   Json = 'json',
   Ods = 'ods',

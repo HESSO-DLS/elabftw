@@ -66,6 +66,9 @@ final class UpdateDatabase extends Command
             $newSchema = $Update->runUpdateScript($input->getOption('force'));
             $output->writeln(sprintf('<info>Updated to schema %d.</info>', $newSchema));
         }
+        // fork tables live outside the upstream schema numbering, these files are idempotent and always run
+        $ForkSql = new Sql(new Fs(new LocalFilesystemAdapter(dirname(__DIR__) . '/sql')), $output);
+        $ForkSql->execFile('fork/whiteboard.sql');
         return Command::SUCCESS;
     }
 }

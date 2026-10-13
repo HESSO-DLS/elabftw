@@ -71,6 +71,7 @@ use Elabftw\Models\TeamTags;
 use Elabftw\Models\Todolist;
 use Elabftw\Models\UnfinishedSteps;
 use Elabftw\Models\Uploads;
+use Elabftw\Models\Whiteboard;
 use Elabftw\Models\UserRequestActions;
 use Elabftw\Models\Users2Rors;
 use Elabftw\Models\Users\AnonymousUser;
@@ -414,6 +415,7 @@ final class Apiv2Controller extends AbstractApiController
                 ApiSubModels::Steps => new Steps($this->Model, $this->subId),
                 ApiSubModels::Tags => new Tags($this->Model, $this->subId),
                 ApiSubModels::Uploads => new Uploads($this->Model, $this->subId),
+                ApiSubModels::Whiteboard => new Whiteboard($this->Model, $this->subId),
                 default => throw new InvalidApiSubModelException(ApiEndpoint::from($this->Model->entityType->value)),
             };
         }

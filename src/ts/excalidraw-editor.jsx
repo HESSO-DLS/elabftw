@@ -23,6 +23,7 @@ import './excalidraw-iframe.css';
 function ExcalidrawEditor({ lib }) {
   const { Excalidraw, MainMenu, WelcomeScreen, exportToBlob, hashElementsVersion, loadFromBlob, serializeAsJSON } = lib;
   const [api, setApi] = useState(null);
+  const [readonly, setReadonly] = useState(true);
   const apiRef = useRef(null);
   const portRef = useRef(null);
   const isDirtyRef = useRef(false);
@@ -39,12 +40,17 @@ function ExcalidrawEditor({ lib }) {
     portRef.current?.postMessage({ type: 'exd-dirty', dirty });
   };
 
-  const markClean = () => {
+  const currentHash = () => {
     const excalidrawApi = apiRef.current;
-    if (!excalidrawApi) return;
-    savedHashRef.current = sceneHash(excalidrawApi.getSceneElementsIncludingDeleted(), excalidrawApi.getFiles());
+    return sceneHash(excalidrawApi.getSceneElementsIncludingDeleted(), excalidrawApi.getFiles());
+  };
+
+  // hash: the scene version that was saved, edits made since then stay dirty
+  const markClean = (hash) => {
+    if (!apiRef.current) return;
+    savedHashRef.current = hash ?? currentHash();
     isDirtyRef.current = true;
-    setDirty(false);
+    setDirty(currentHash() !== savedHashRef.current);
   };
 
   const onChange = (elements, appState, files) => {
@@ -56,19 +62,33 @@ function ExcalidrawEditor({ lib }) {
     setDirty(sceneHash(elements, files) !== savedHashRef.current);
   };
 
+  const fitToContent = () => {
+    const excalidrawApi = apiRef.current;
+    if (!excalidrawApi || excalidrawApi.getSceneElements().length === 0) return;
+    excalidrawApi.scrollToContent(undefined, { fitToViewport: true, viewportZoomFactor: 0.9 });
+  };
+
+  // an empty json means the entity has no whiteboard yet
   const loadScene = async (json) => {
     const excalidrawApi = apiRef.current;
     if (!excalidrawApi) throw new Error('Whiteboard editor is not ready.');
-    const scene = await loadFromBlob(new Blob([json], { type: 'application/json' }), null, null);
     ignoreChangesRef.current = true;
     excalidrawApi.resetScene();
-    excalidrawApi.addFiles(Object.values(scene.files || {}));
-    excalidrawApi.updateScene({
-      elements: scene.elements,
-      appState: { viewBackgroundColor: scene.appState?.viewBackgroundColor ?? '#ffffff' },
-    });
+    if (json) {
+      const scene = await loadFromBlob(new Blob([json], { type: 'application/json' }), null, null);
+      excalidrawApi.addFiles(Object.values(scene.files || {}));
+      excalidrawApi.updateScene({
+        elements: scene.elements,
+        appState: { viewBackgroundColor: scene.appState?.viewBackgroundColor ?? '#ffffff' },
+      });
+    }
     excalidrawApi.history.clear();
-    excalidrawApi.scrollToContent(undefined, { fitToViewport: true, viewportZoomFactor: 0.9 });
+    // the section can be collapsed (zero size) on load: fit again once it is shown
+    if (window.innerWidth > 0) {
+      fitToContent();
+    } else {
+      window.addEventListener('resize', fitToContent, { once: true });
+    }
     // let excalidraw process the update before we start tracking changes again
     window.setTimeout(() => {
       ignoreChangesRef.current = false;
@@ -76,40 +96,24 @@ function ExcalidrawEditor({ lib }) {
     }, 0);
   };
 
+  // the scene as json, a png preview (null when empty) and the hash of what is exported
   const exportScene = async () => {
     const excalidrawApi = apiRef.current;
     if (!excalidrawApi) throw new Error('Whiteboard editor is not ready.');
+    const hash = currentHash();
     const elements = excalidrawApi.getSceneElements();
-    if (elements.length === 0) throw new Error('The whiteboard is empty.');
     const appState = excalidrawApi.getAppState();
     const files = excalidrawApi.getFiles();
     const json = serializeAsJSON(elements, appState, files, 'local');
-    const png = await exportToBlob({
+    const png = elements.length === 0 ? null : await exportToBlob({
       elements,
       files,
       mimeType: 'image/png',
       exportPadding: 16,
-      appState: {
-        ...appState,
-        exportBackground: true,
-        exportWithDarkMode: false,
-        // the png also carries the scene so it can be reopened on excalidraw.com
-        exportEmbedScene: true,
-      },
+      appState: { ...appState, exportBackground: true, exportWithDarkMode: false },
     });
-    return { json, png };
+    return { json, png, hash };
   };
-
-  // warn before leaving the page with unsaved changes
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      if (!isDirtyRef.current) return;
-      event.preventDefault();
-      event.returnValue = '';
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
 
   // only accept a channel once the editor API is available
   useEffect(() => {
@@ -119,18 +123,20 @@ function ExcalidrawEditor({ lib }) {
 
     const onPortMessage = async (event) => {
       const data = event.data;
-      if (data?.type === 'exd-load-scene' && typeof data.json === 'string') {
+      if (data?.type === 'exd-config') {
+        setReadonly(data.readonly !== false);
+      } else if (data?.type === 'exd-load-scene' && typeof data.json === 'string') {
         try {
           await loadScene(data.json);
         } catch (error) {
           portRef.current?.postMessage({ type: 'exd-error', message: error?.message || 'Could not load whiteboard.' });
         }
       } else if (data?.type === 'exd-saved') {
-        markClean();
+        markClean(typeof data.hash === 'string' ? data.hash : undefined);
       } else if (data?.type === 'exd-scene-request' && typeof data.requestId === 'string') {
         try {
-          const { json, png } = await exportScene();
-          portRef.current?.postMessage({ type: 'exd-scene-response', requestId: data.requestId, json, png });
+          const { json, png, hash } = await exportScene();
+          portRef.current?.postMessage({ type: 'exd-scene-response', requestId: data.requestId, json, png, hash });
         } catch (error) {
           portRef.current?.postMessage({ type: 'exd-scene-response', requestId: data.requestId, error: error?.message || 'Could not export whiteboard.' });
         }
@@ -163,6 +169,7 @@ function ExcalidrawEditor({ lib }) {
     <Excalidraw
       excalidrawAPI={setApi}
       onChange={onChange}
+      viewModeEnabled={readonly}
       UIOptions={{
         canvasActions: {
           // saving and loading is done by eLabFTW
@@ -174,7 +181,7 @@ function ExcalidrawEditor({ lib }) {
       }}
     >
       <MainMenu>
-        <MainMenu.DefaultItems.ClearCanvas />
+        {!readonly && <MainMenu.DefaultItems.ClearCanvas />}
         <MainMenu.DefaultItems.ToggleTheme />
         <MainMenu.DefaultItems.ChangeCanvasBackground />
         <MainMenu.Separator />

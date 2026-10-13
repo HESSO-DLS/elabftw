@@ -103,6 +103,13 @@ if (document.getElementById('uploadsDiv')) {
   );
 }
 
+if (document.getElementById('excalidrawIframe')) {
+  void import(
+    /* webpackChunkName: 'whiteboard' */
+    './excalidraw'
+  );
+}
+
 if (window.location.pathname === '/revisions.php') {
   void import(
     /* webpackChunkName: 'revisions' */

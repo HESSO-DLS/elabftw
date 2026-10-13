@@ -1,23 +1,18 @@
-<section id='excalidrawEditor' aria-label='{{ 'Whiteboard'|trans }}'>
+{# one whiteboard per entity, loaded and autosaved by excalidraw.ts. In view mode it is read-only and hidden when empty #}
+<section id='excalidrawEditor' aria-label='{{ 'Whiteboard'|trans }}' data-readonly='{{ readonly ? '1' : '0' }}'>
   <h3 data-action='toggle-next' data-scroll-btn='fa-chalkboard' data-scroll-btn-label='{{ 'Whiteboard'|trans }}' data-toggle-target='excalidrawEditorContainer' data-opened-icon='fa-caret-down' data-closed-icon='fa-caret-right' class='d-inline togglable-section-title mt-2' tabindex='0' role='button' aria-expanded='false' aria-controls='excalidrawEditorContainer'>
     <i id='excalidrawEditorIcon' class='fas fa-caret-right fa-fw mr-2'></i>{{ 'Whiteboard'|trans }}
   </h3>
   <div id='excalidrawEditorContainer' class='m-2' hidden data-save-hidden='excalidrawEditorContainer'>
-    <div class='d-flex justify-content-between align-items-center'>
-      <span hidden id='excalidrawUnsavedChanges'>{{ 'You have unsaved changes'|trans|msg('warning', false) }}</span>
-      <div class='ml-auto mb-2'>
-        <button type='button' id='excalidrawSaveAsAttachment' class='btn btn-primary mr-2'>
-          <i class='fas fa-paperclip fa-fw mr-1'></i>{{ 'Save as attachment'|trans }}
-        </button>
-        <button type='button' id='excalidrawReplaceAttachment' class='btn btn-secondary mr-2' title='{{ 'Replace attachment'|trans }}' aria-label='{{ 'Replace attachment'|trans }}' disabled>
-          <i class='fas fa-rotate fa-fw mr-1'></i>{{ 'Replace attachment'|trans }}
-        </button>
+    {% if not readonly %}
+      <div class='d-flex justify-content-end mb-2'>
+        <small id='excalidrawStatus' class='text-muted' role='status' aria-live='polite'></small>
       </div>
-    </div>
+    {% endif %}
     <div id='excalidrawEditorFrame'>
       {# allow-modals is needed for confirmation dialogs, clipboard access is for copy/paste of shapes and images #}
-      <iframe id='excalidrawIframe' title='{{ 'Whiteboard'|trans }}' src='/excalidraw.html' sandbox='allow-scripts allow-modals' allow='clipboard-read; clipboard-write'></iframe>
+      <iframe id='excalidrawIframe' title='{{ 'Whiteboard'|trans }}' data-src='/excalidraw.html' sandbox='allow-scripts allow-modals' allow='clipboard-read; clipboard-write'></iframe>
     </div>
   </div>
+  <hr>
 </section>
-<hr>

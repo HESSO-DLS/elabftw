@@ -125,7 +125,7 @@
 
 {% include 'spreadsheet-editor.html' %}
 
-{% include 'excalidraw-editor.html' %}
+{% include 'excalidraw-editor.html' with {readonly: Entity.entityData.locked == 1} %}
 
 {% include 'links.html' %}
 

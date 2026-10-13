@@ -126,6 +126,13 @@ tr:nth-child(odd) {
   max-width: 100%;
 }
 
+.whiteboard-image {
+  border: 1px solid $firstlevel;
+  margin-top: 0.5em;
+  max-height: 18cm;
+  max-width: 100%;
+}
+
 /* border-radius or padding not working on non div elements */
 .tag {
   border: 1px solid #ccc;

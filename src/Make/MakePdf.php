@@ -30,6 +30,7 @@ use Elabftw\Models\Notifications\PdfGenericError;
 use Elabftw\Models\Teams2Rors;
 use Elabftw\Models\Users2Rors;
 use Elabftw\Models\Users\Users;
+use Elabftw\Models\Whiteboard;
 use Elabftw\Services\Filter;
 use Elabftw\Services\Tex2Svg;
 use Elabftw\Traits\TwigTrait;
@@ -298,6 +299,7 @@ class MakePdf extends AbstractMakePdf
             // TODO fix for templates
             'linkBaseUrl' => $baseUrls,
             'url' => sprintf('%s/%s?mode=view&id=%d', $siteUrl, $this->Entity->entityType->toPage(), $this->Entity->id ?? 0),
+            'whiteboardPreview' => new Whiteboard($this->Entity)->getPreviewBase64(),
             'useCjk' => $this->requester->userData['cjk_fonts'],
         );
 

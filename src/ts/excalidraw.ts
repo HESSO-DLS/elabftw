@@ -1,36 +1,46 @@
 /**
- * @copyright 2026 Simon Duerr
+ * @copyright 2026 HES-SO Valais-Wallis
  * @see https://www.elabftw.net Official website
  * @license AGPL-3.0
  * @package elabftw
  */
 
 /**
- * Parent page side of the whiteboard editor (Excalidraw).
+ * Parent page side of the whiteboard (Excalidraw).
+ * Each entity has one whiteboard, stored with the whiteboard api submodel. It is loaded with the page and autosaved.
  * The editor itself runs in a sandboxed iframe (excalidraw-editor.jsx), we talk to it through a MessageChannel.
- * A whiteboard is stored as two attachments: "name.excalidraw" (the scene as JSON) and "name.excalidraw.png" (preview).
  */
-import { Action, FileType, Model } from './interfaces';
-import { askFileName, ensureTogglableSectionIsOpen, getNewIdFromPostRequest, reloadElements } from './misc';
+import { Model } from './interfaces';
 import { ApiC } from './api';
 import { entity } from './getEntity';
 import { notify } from './notify';
-import { on } from './handlers';
 
+const AUTOSAVE_INTERVAL_MS = 60_000;
 const RESPONSE_TIMEOUT_MS = 30_000;
+const section = document.getElementById('excalidrawEditor');
 const iframe = document.getElementById('excalidrawIframe') as HTMLIFrameElement;
-const saveButton = document.getElementById('excalidrawSaveAsAttachment') as HTMLButtonElement;
-const replaceButton = document.getElementById('excalidrawReplaceAttachment') as HTMLButtonElement;
-const unsavedWarning = document.getElementById('excalidrawUnsavedChanges');
+const statusEl = document.getElementById('excalidrawStatus');
+const readonly = section?.dataset.readonly === '1';
+const endpoint = `${entity.type}/${entity.id}/${Model.Whiteboard}`;
+
+type Scene = { json: string; png: Blob | null; hash: string };
+type StoredWhiteboard = { content: string; modified_at: string | null };
 
 let portPromise: Promise<MessagePort> | null = null;
-// the attachment currently loaded in the editor, if any
-let currentUpload: { id: number; name: string } | null = null;
+// modified_at of the version we started from, sent back on save to detect concurrent edits
+let baseModifiedAt: string | null = null;
 let dirty = false;
 let saving = false;
+let lastSaved: Date | null = null;
+// once a save was refused because someone else saved in between, stop autosaving until reload
+let conflict = false;
 
-type Scene = { json: string; png: Blob };
-type UploadInfo = { id: number; real_name: string };
+const setStatus = (text: string, isError = false): void => {
+  if (!statusEl) return;
+  statusEl.textContent = text;
+  statusEl.classList.toggle('text-danger', isError);
+  statusEl.classList.toggle('text-muted', !isError);
+};
 
 const isIframeMessage = (event: MessageEvent, iframeWindow: Window | null): boolean => {
   // The iframe sandbox intentionally omits allow-same-origin, so its origin is opaque.
@@ -98,11 +108,12 @@ const requestScene = async (): Promise<Scene> => {
         reject(new Error(event.data.error));
         return;
       }
-      if (typeof event.data.json !== 'string' || !(event.data.png instanceof Blob)) {
+      const { json, png, hash } = event.data;
+      if (typeof json !== 'string' || typeof hash !== 'string' || !(png === null || png instanceof Blob)) {
         reject(new Error('Whiteboard editor returned invalid data.'));
         return;
       }
-      resolve({ json: event.data.json, png: event.data.png });
+      resolve({ json, png, hash });
     };
     const timeout = window.setTimeout(() => {
       cleanup();
@@ -113,118 +124,89 @@ const requestScene = async (): Promise<Scene> => {
   });
 };
 
-const uploadUrl = (uploadId?: number): string => {
-  const base = `api/v2/${entity.type}/${entity.id}/${Model.Upload}`;
-  return uploadId ? `${base}/${uploadId}` : base;
-};
-
-// create a new attachment, or a new version of an existing one
-async function postFile(file: File, uploadId?: number): Promise<number> {
-  const fd = new FormData();
-  fd.append('file', file);
-  if (uploadId) fd.append('action', Action.Replace);
-  const res = await fetch(uploadUrl(uploadId), { method: 'POST', body: fd });
-  if (!res.ok) {
-    throw new Error(`Upload failed (${res.status})`);
-  }
-  return getNewIdFromPostRequest(res);
-}
-
-const previewName = (name: string): string => `${name}.png`;
-
-async function findUploadByName(name: string): Promise<UploadInfo | undefined> {
-  const uploads = await ApiC.getJson<UploadInfo[]>(`${entity.type}/${entity.id}/${Model.Upload}`);
-  return uploads.find(upload => upload.real_name === name);
-}
-
-async function saveScene(scene: Scene, name: string, uploadId?: number): Promise<{ id: number; name: string }> {
-  const id = await postFile(new File([scene.json], name, { type: 'application/json' }), uploadId);
-  // keep the preview next to the scene: replace it if it exists, create it otherwise
-  const pngName = previewName(name);
-  const existingPreview = await findUploadByName(pngName);
-  await postFile(new File([scene.png], pngName, { type: 'image/png' }), existingPreview?.id);
-  return { id, name };
-}
-
-const setDirty = (value: boolean): void => {
-  dirty = value;
-  unsavedWarning.hidden = !dirty;
-};
-
-const updateButtons = (): void => {
-  saveButton.disabled = saving;
-  replaceButton.disabled = saving || !currentUpload;
-};
-
-async function withScene(callback: (scene: Scene) => Promise<{ id: number; name: string } | void>): Promise<void> {
-  if (saving) return;
-  saving = true;
-  updateButtons();
-  try {
-    const scene = await requestScene();
-    const result = await callback(scene);
-    if (!result) return;
-    currentUpload = result;
-    notify.success();
-    setDirty(false);
-    (await getPort()).postMessage({ type: 'exd-saved' });
-    reloadElements(['uploadsDiv']);
-  } catch (error) {
-    notify.error(error instanceof Error ? error.message : 'Unexpected whiteboard error.');
-  } finally {
-    saving = false;
-    updateButtons();
-  }
-}
-
-// LOAD A WHITEBOARD FROM AN ATTACHMENT
-on('excalidraw-load-file', async (el: HTMLElement) => {
-  if (dirty && !window.confirm('Discard current whiteboard? All unsaved changes will be lost.')) return;
-  try {
-    const res = await fetch(`app/download.php?f=${encodeURIComponent(el.dataset.path)}&storage=${el.dataset.storage}`, {
-      headers: new Headers({ 'cache-control': 'no-cache' }),
-    });
-    if (!res.ok) throw new Error('Failed to fetch uploaded file.');
-    const json = await res.text();
-    ensureTogglableSectionIsOpen('excalidrawEditorIcon', 'excalidrawEditorContainer');
-    (await getPort()).postMessage({ type: 'exd-load-scene', json });
-    currentUpload = { id: Number(el.dataset.uploadid), name: el.dataset.name };
-    setDirty(false);
-    updateButtons();
-  } catch (error) {
-    notify.error(error instanceof Error ? error.message : 'Unexpected error while loading whiteboard.');
-  }
+const blobToDataUrl = (blob: Blob): Promise<string> => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result as string);
+  reader.onerror = () => reject(reader.error);
+  reader.readAsDataURL(blob);
 });
 
-if (iframe) {
-  saveButton.addEventListener('click', () => {
-    void withScene(async scene => {
-      const name = askFileName(FileType.Excalidraw);
-      if (!name) return;
-      return saveScene(scene, name);
+const timeOfDay = (date: Date): string => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+async function save(): Promise<void> {
+  if (readonly || conflict || saving || !dirty) return;
+  saving = true;
+  setStatus('Saving…');
+  try {
+    const scene = await requestScene();
+    const res = await ApiC.patch(endpoint, {
+      content: scene.json,
+      preview: scene.png ? await blobToDataUrl(scene.png) : '',
+      base_modified_at: baseModifiedAt,
+      notifOnSaved: 0,
+      notifOnError: 0,
     });
+    const stored: StoredWhiteboard = await res.json();
+    baseModifiedAt = stored.modified_at;
+    lastSaved = new Date();
+    // the editor compares with the current scene: edits made during the save stay unsaved,
+    // otherwise it answers with exd-dirty false and the status becomes "Saved at"
+    setStatus('Unsaved changes');
+    (await getPort()).postMessage({ type: 'exd-saved', hash: scene.hash });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unexpected whiteboard error.';
+    if (/changed by someone else/i.test(message)) {
+      conflict = true;
+      notify.error(message);
+    }
+    setStatus(`Not saved: ${message}`, true);
+  } finally {
+    saving = false;
+  }
+}
+
+async function init(): Promise<void> {
+  const stored = await ApiC.getJson<StoredWhiteboard>(endpoint);
+  baseModifiedAt = stored.modified_at;
+  // nothing to show to readers: hide the section and don't load the editor at all
+  if (readonly && !stored.content) {
+    section.hidden = true;
+    return;
+  }
+  iframe.src = iframe.dataset.src;
+  const port = await getPort();
+  port.addEventListener('message', event => {
+    if (event.data?.type === 'exd-dirty' && typeof event.data.dirty === 'boolean') {
+      dirty = event.data.dirty;
+      if (conflict) return;
+      if (dirty) setStatus('Unsaved changes');
+      else if (lastSaved) setStatus(`Saved at ${timeOfDay(lastSaved)}`);
+    } else if (event.data?.type === 'exd-error' && typeof event.data.message === 'string') {
+      notify.error(event.data.message);
+    }
   });
+  port.start();
+  port.postMessage({ type: 'exd-config', readonly });
+  port.postMessage({ type: 'exd-load-scene', json: stored.content });
+  if (readonly) return;
 
-  replaceButton.addEventListener('click', () => {
-    if (!currentUpload) return;
-    const upload = currentUpload;
-    void withScene(scene => saveScene(scene, upload.name, upload.id));
+  setStatus(stored.modified_at ? `Saved at ${timeOfDay(new Date(stored.modified_at.replace(' ', 'T')))}` : 'Changes are saved automatically');
+  window.setInterval(() => void save(), AUTOSAVE_INTERVAL_MS);
+  // save when the user switches tab or minimizes the window
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') void save();
   });
-
-  getPort().then(port => {
-    port.addEventListener('message', event => {
-      if (event.data?.type === 'exd-dirty' && typeof event.data.dirty === 'boolean') {
-        setDirty(event.data.dirty);
-      } else if (event.data?.type === 'exd-error' && typeof event.data.message === 'string') {
-        notify.error(event.data.message);
-      }
-    });
-    port.start();
-  }).catch(error => notify.error(error instanceof Error ? error.message : 'Whiteboard editor is not available.'));
-
+  // at most the last minute can be lost: warn before leaving
   window.addEventListener('beforeunload', event => {
     if (!dirty) return;
+    void save();
     event.preventDefault();
     event.returnValue = '';
+  });
+}
+
+if (iframe && section) {
+  init().catch(error => {
+    setStatus(`Whiteboard not available: ${error instanceof Error ? error.message : error}`, true);
   });
 }

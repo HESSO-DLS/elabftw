@@ -1133,6 +1133,7 @@ abstract class AbstractEntity extends AbstractRest
         LinksFactory::getCompoundsLinks($linkEntity)->duplicate($sourceId, $newId, fromTemplate: $fromTemplate, toTemplate: $toTemplate);
         LinksFactory::getContainersLinks($linkEntity)->duplicate($sourceId, $newId, fromTemplate: $fromTemplate, toTemplate: $toTemplate);
         new Steps($sourceEntity)->duplicate($fresh, $sourceId, $newId);
+        new Whiteboard($sourceEntity)->duplicate($fresh, $sourceId, $newId);
 
         $freshTags = new Tags($fresh);
         foreach (array_column(new Tags($sourceEntity)->readAll(), 'tag') as $tag) {

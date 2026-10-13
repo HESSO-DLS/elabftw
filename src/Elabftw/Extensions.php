@@ -161,9 +161,6 @@ final class Extensions
         if (in_array($ext, self::IMAGE, true)) {
             return 'fa-file-image';
         }
-        if ($ext === 'excalidraw') {
-            return 'fa-chalkboard';
-        }
         if ($ext === 'pdf') {
             return 'fa-file-pdf';
         }
