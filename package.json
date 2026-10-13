@@ -38,6 +38,7 @@
     "@e965/xlsx": "^0.20.3",
     "@eslint/eslintrc": "^3.3.6",
     "@eslint/js": "^10.0.1",
+    "@excalidraw/excalidraw": "^0.18.1",
     "@fancyapps/fancybox": "^3.5.7",
     "@fullcalendar/bootstrap": "^6.1.21",
     "@fullcalendar/core": "^6.1.21",
@@ -169,6 +170,9 @@
   "homepage": "https://www.elabftw.net",
   "packageManager": "yarn@4.15.0",
   "dependenciesMeta": {
+    "@excalidraw/excalidraw": {
+      "unplugged": true
+    },
     "@mathjax/mathjax-newcm-font": {
       "unplugged": true
     },

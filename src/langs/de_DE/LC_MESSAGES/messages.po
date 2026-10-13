@@ -55,7 +55,7 @@ msgstr[1] "Experimente"
 
 #: src/Elabftw/i18n4Js.php:209 src/Enums/Scope.php:36 web/team.php:37
 msgid "Team"
-msgstr "Team"
+msgstr "Organisation"
 
 #: src/templates/changelog-table.html:4
 #: src/templates/field-builder-modal.html:59 src/templates/pdf.html:32
@@ -292,7 +292,7 @@ msgstr "Powered by"
 
 #: src/Elabftw/i18n4Js.php:210
 msgid "Teams"
-msgstr "Teams"
+msgstr "Organisationen"
 
 #: src/templates/ts-config.html:48
 msgid "URL for external timestamping service:"
@@ -438,11 +438,11 @@ msgstr "Bestätigen"
 
 #: src/templates/profile.html:37 src/templates/view-permissions-details.html:14
 msgid "Groups"
-msgstr "Gruppen"
+msgstr "Projektteams"
 
 #: src/templates/admin.html:67
 msgid "Configure your Team"
-msgstr "Ihr Team konfigurieren"
+msgstr "Ihre Organisation konfigurieren"
 
 #: src/templates/change-pass.html:13
 msgid "characters minimum"
@@ -713,7 +713,7 @@ msgstr "Tag-Manager"
 
 #: src/templates/admin.html:311
 msgid "Manage tags of the team"
-msgstr "Tags des Teams verwalten"
+msgstr "Tags der Organisation verwalten"
 
 #: src/templates/show.html:160
 msgid "Select number of stars"
@@ -726,7 +726,7 @@ msgstr "Anzahl der Sterne auswählen"
 #: src/templates/ownership-transfer-modal.html:31
 #: src/templates/register.html:43
 msgid "Select a team"
-msgstr "Wählen Sie ein Team"
+msgstr "Wählen Sie eine Organisation"
 
 #: src/templates/register.html:13
 msgid "Privacy policy"
@@ -963,7 +963,7 @@ msgstr "Noch kein Benutzerkonto? Jetzt %sregistrieren%s!"
 
 #: src/templates/login-full.html:91
 msgid "Your account is linked to several teams. Select in which team you want to log in"
-msgstr "Ihr Benutzer ist mehreren Teams zugewiesen. Bitte wählen Sie aus, in welchem ​​Team Sie sich anmelden möchten"
+msgstr "Ihr Benutzer ist mehreren Organisationen zugewiesen. Bitte wählen Sie aus, in welcher Organisation Sie sich anmelden möchten"
 
 #: src/Exceptions/InvalidCredentialsException.php:33
 msgid "Invalid email/password combination."
@@ -971,7 +971,7 @@ msgstr "E-Mail/Passwort-Kombination ungültig."
 
 #: src/Elabftw/i18n4Js.php:55
 msgid "Add team"
-msgstr "Team hinzufügen"
+msgstr "Organisation hinzufügen"
 
 #: web/login.php:135
 msgid "Your session expired."
@@ -1060,7 +1060,7 @@ msgstr "Dateikommentar"
 
 #: src/Models/Notifications/SelfNeedValidation.php:35
 msgid "Hi. Your account has been created but it is currently inactive (you cannot log in). The team admin has been notified and will validate your account. You will receive an email when it is done."
-msgstr "Hallo. Ihr Benutzerkonto wurde erstellt, ist aber zurzeit inaktiv (Sie können sich nicht anmelden). Der Team-Administrator wurde benachrichtigt und wird Ihr Benutzerkonto bestätigen. Sie werden eine E-Mail erhalten, sobald dies erledigt ist."
+msgstr "Hallo. Ihr Benutzerkonto wurde erstellt, ist aber zurzeit inaktiv (Sie können sich nicht anmelden). Der Organisations-Administrator wurde benachrichtigt und wird Ihr Benutzerkonto bestätigen. Sie werden eine E-Mail erhalten, sobald dies erledigt ist."
 
 #: src/templates/sysconfig.html:576
 msgid "You can add several domains by separating them with a comma."
@@ -1302,7 +1302,7 @@ msgstr "Sollte ein Benutzerkonto existieren, wurde eine E-Mail versendet."
 #: src/Auth/UserLoginValidator.php:66
 #: web/app/controllers/ResetPasswordController.php:82
 msgid "Your account is not validated. An admin of your team needs to validate it!"
-msgstr "Ihr Benutzerkonto ist nicht validiert. Ein Administrator aus Ihrem Team muss es bestätigen!"
+msgstr "Ihr Benutzerkonto ist nicht validiert. Ein Administrator aus Ihrer Organisation muss es bestätigen!"
 
 #: web/app/controllers/ResetPasswordController.php:91
 msgid "Hi. Someone (probably you) requested a new password on eLabFTW.%s Please follow this link to reset your password: %s %sThis link is only valid for %s minutes."
@@ -1364,7 +1364,7 @@ msgstr "Neuer Kommentar veröffentlicht"
 
 #: src/Services/Transform.php:64
 msgid "New user added to your team"
-msgstr "Ein neuer Benutzer wurde Ihrem Team hinzugefügt"
+msgstr "Ein neuer Benutzer wurde Ihrer Organisation hinzugefügt"
 
 #: src/Models/Notifications/UserNeedValidation.php:38
 msgid "[ACTION REQUIRED]"
@@ -1437,7 +1437,7 @@ msgstr "Benachrichtigungseinstellungen"
 
 #: src/templates/login-full.html:18 src/templates/login-full.html:55
 msgid "Request access to a team"
-msgstr "Zugang zu einem Team anfordern"
+msgstr "Zugang zu einer Organisation anfordern"
 
 #: src/templates/login-full.html:50 src/templates/login-full.html:68
 msgid "Request access"
@@ -1623,7 +1623,7 @@ msgstr "Fehler: Archivdatei konnte nicht korrekt gelesen werden! (Es fehlt %s)"
 
 #: src/Auth/UserLoginValidator.php:62
 msgid "Your account has expired. Contact your team Admin to extend its validity."
-msgstr "Ihr Benutzerkonto ist abgelaufen. Kontaktieren Sie einen Administrator Ihres Teams, um Ihr Benutzerkonto zu reaktivieren."
+msgstr "Ihr Benutzerkonto ist abgelaufen. Kontaktieren Sie einen Administrator Ihrer Organisation, um Ihr Benutzerkonto zu reaktivieren."
 
 #: src/templates/admin.html:240 src/templates/admin.html:271
 #: src/templates/export-menu.html:130 src/templates/show.html:517
@@ -1708,7 +1708,7 @@ msgstr "Eingeloggt als %s in:"
 
 #: src/templates/head.html:235
 msgid "Switch team"
-msgstr "Team wechseln"
+msgstr "Organisation wechseln"
 
 #: src/templates/head.html:240
 msgid "My profile"
@@ -1934,11 +1934,11 @@ msgstr "Basis"
 
 #: src/templates/admin.html:490 src/templates/permissions-edit-modal.html:78
 msgid "Selecting a team here will give access to all members of this team."
-msgstr "Die Auswahl eines Teams gewährt allen Usern dieses Teams Zugriff."
+msgstr "Die Auswahl einer Organisation gewährt allen Mitgliedern dieser Organisation Zugriff."
 
 #: src/templates/admin.html:507
 msgid "Teamgroup"
-msgstr "Team-Gruppe"
+msgstr "Projektteam"
 
 #: src/templates/permissions-edit-modal.html:130
 msgid "Allow read access for anonymous users"
@@ -2009,7 +2009,7 @@ msgstr "Standard"
 #: src/Models/Notifications/UserCreated.php:44
 #: src/Models/Notifications/UserNeedValidation.php:38
 msgid "New user added to team: %s"
-msgstr "Neuer Benutzer zum Team hinzugefügt: %s"
+msgstr "Neuer Benutzer zur Organisation hinzugefügt: %s"
 
 #: web/admin.php:100 web/sysconfig.php:69
 msgid "No users found. Try another search."
@@ -2025,7 +2025,7 @@ msgstr "Verwendung einer Experimentvorlage erzwingen"
 
 #: src/templates/admin.html:168
 msgid "Add a group"
-msgstr "Eine Gruppe hinzufügen"
+msgstr "Projektteam hinzufügen"
 
 #: src/templates/admin.html:205
 msgid "User name"
@@ -2065,7 +2065,7 @@ msgstr "Liste der Benutzer"
 
 #: src/templates/edit-user-modal.html:70
 msgid "Manage teams for user"
-msgstr "Verwalten der Teams für Benutzer"
+msgstr "Verwalten der Organisationen für Benutzer"
 
 #: src/Elabftw/i18n4Js.php:123
 msgid "Is Owner"
@@ -2185,11 +2185,11 @@ msgstr "Suche in Experimenten"
 
 #: src/templates/sysconfig.html:14 src/templates/sysconfig.html:19
 msgid "Create team"
-msgstr "Team erstellen"
+msgstr "Organisation erstellen"
 
 #: src/templates/sysconfig.html:22
 msgid "Enter team name"
-msgstr "Teamname eingeben"
+msgstr "Organisationsname eingeben"
 
 #: src/templates/sysconfig.html:48
 msgid "Communication"
@@ -2257,15 +2257,15 @@ msgstr "Version der MySQL-Datenbankstruktur"
 
 #: src/templates/sysconfig.html:346
 msgid "Teams list"
-msgstr "Liste der Teams"
+msgstr "Liste der Organisationen"
 
 #: src/templates/sysconfig.html:349
 msgid "This page allows you to edit the teams present on this instance."
-msgstr "Auf dieser Seite können Sie die in dieser Instanz vorhandenen Teams bearbeiten."
+msgstr "Auf dieser Seite können Sie die in dieser Instanz vorhandenen Organisationen bearbeiten."
 
 #: src/templates/sysconfig.html:352
 msgid "Create a team"
-msgstr "Ein Team erstellen"
+msgstr "Eine Organisation erstellen"
 
 #: src/templates/sysconfig.html:363
 msgid "Organisation ID"
@@ -2382,7 +2382,7 @@ msgstr "Basis-URL"
 
 #: src/templates/sysconfig.html:895
 msgid "Teams settings"
-msgstr "Einstellungen der Teams"
+msgstr "Einstellungen der Organisationen"
 
 #: src/templates/sysconfig.html:898
 msgid "Fallback to internal id if existing user cannot be matched with email"
@@ -2394,16 +2394,16 @@ msgstr "Wenn der Benutzer mit einer internen ID übereinstimmt, soll die vom IDP
 
 #: src/templates/sysconfig.html:900
 msgid "Synchronize the local teams with the teams sent by IDP"
-msgstr "Synchronisierung der lokalen Teams mit den vom IDP übermittelten Teams"
+msgstr "Synchronisierung der lokalen Organisationen mit den vom IDP übermittelten Organisationen"
 
 #: src/templates/sysconfig.html:901
 msgid "Create team sent by IDP if it doesn't exist already"
-msgstr "Von IDP gesendetes Team erstellen, sofern es nicht bereits existiert"
+msgstr "Von IDP gesendete Organisation erstellen, sofern sie nicht bereits existiert"
 
 #: src/templates/sysconfig.html:904 src/templates/sysconfig.html:1102
 #: src/templates/sysconfig.html:1186
 msgid "If no team attribute is found, to which team user is assigned?"
-msgstr "Sollte kein Team-Attribut gefunden werden, welchem Team wird der Benutzer zugeordnet?"
+msgstr "Sollte kein Organisations-Attribut gefunden werden, welcher Organisation wird der Benutzer zugeordnet?"
 
 #: src/templates/sysconfig.html:909 src/templates/sysconfig.html:1107
 #: src/templates/sysconfig.html:1191
@@ -2412,7 +2412,7 @@ msgstr "Fehler auslösen"
 
 #: src/templates/sysconfig.html:910 src/templates/sysconfig.html:1108
 msgid "Let user select a team"
-msgstr "Benutzer ein Team auswählen lassen"
+msgstr "Benutzer eine Organisation auswählen lassen"
 
 #: src/templates/sysconfig.html:916 src/templates/sysconfig.html:1114
 #: src/templates/sysconfig.html:1197
@@ -2451,11 +2451,11 @@ msgstr "Sie können nach mehreren Attributen suchen, indem Sie diese mit einem K
 
 #: src/templates/sysconfig.html:1093
 msgid "What attribute to look for the team name"
-msgstr "Welches Attribut ist für den Teamnamen zu suchen"
+msgstr "Welches Attribut ist für den Organisationsnamen zu suchen"
 
 #: src/templates/sysconfig.html:1098 src/templates/sysconfig.html:1205
 msgid "Create team sent by server if it doesn't exist already"
-msgstr "Vom Server gesendetes Team erstellen, sofern es nicht bereits existiert"
+msgstr "Vom Server gesendete Organisation erstellen, sofern sie nicht bereits existiert"
 
 #: src/templates/sysconfig.html:1123
 msgid "What attribute to look for the email"
@@ -2489,16 +2489,16 @@ msgstr "Senden an"
 #: src/templates/scheduler-event-delete-modal.html:11
 #: src/templates/team.html:57
 msgid "Members of team %s"
-msgstr "Mitglieder des Teams %s"
+msgstr "Mitglieder der Organisation %s"
 
 #: src/templates/scheduler-event-delete-modal.html:37
 #: src/templates/team.html:61
 msgid "Members of teamgroup %s"
-msgstr "Mitglieder der Team-Gruppe %s"
+msgstr "Mitglieder des Projektteams %s"
 
 #: src/templates/todolist-panel.html:19 src/templates/todolist-panel.html:20
 msgid "Show steps for team"
-msgstr "Schritte für das Team anzeigen"
+msgstr "Schritte für die Organisation anzeigen"
 
 #: src/templates/ts-config.html:3
 msgid "Select timestamping authority (TSA)"
@@ -3009,7 +3009,7 @@ msgstr "Niedrigste selbstgewählte ID"
 
 #: src/templates/sysconfig.html:172
 msgid "Allow Admins to add existing users to their team"
-msgstr "Admins erlauben bestehende Benutzer zu ihrem Team hinzuzufügen"
+msgstr "Admins erlauben bestehende Benutzer zu ihrer Organisation hinzuzufügen"
 
 #: src/Elabftw/i18n4Js.php:202
 msgid "Sort by column"
@@ -3033,7 +3033,7 @@ msgstr "Informationen zum Gültigkeitsdatum des Kontos"
 
 #: src/Services/ExpirationNotifier.php:82
 msgid "One or several user accounts in your team will expire soon. Their account will become inaccessible (archived). All their data will still be visible to others."
-msgstr "Die Gültigkeit eines oder mehrerer Benutzerkonten in Ihrem Team läuft bald ab. Entsprechende Konten werden unzugänglich (archiviert). Alle Daten dieser Konten sind weiterhin für andere sichtbar."
+msgstr "Die Gültigkeit eines oder mehrerer Benutzerkonten in Ihrer Organisation läuft bald ab. Entsprechende Konten werden unzugänglich (archiviert). Alle Daten dieser Konten sind weiterhin für andere sichtbar."
 
 #: src/Services/Transform.php:115
 msgid "A new eLabFTW version has been installed since your last visit.%sRead the release notes by clicking this message."
@@ -3049,7 +3049,7 @@ msgstr "Ein Sysadmin-Konto kann nicht archiviert werden."
 
 #: src/templates/admin.html:316
 msgid "Tags of the team"
-msgstr "Tags des Teams"
+msgstr "Tags der Organisation"
 
 #: src/templates/editusers.html:121
 msgid "Remote directory users list"
@@ -3237,7 +3237,7 @@ msgstr "Eine Ressource kann nicht mit sich selbst verknüpft werden. Bitte wähl
 
 #: src/Enums/BasePermissions.php:32
 msgid "Only members of the team"
-msgstr "Nur Teammitglieder"
+msgstr "Nur Mitglieder der Organisation"
 
 #: src/Enums/PasswordComplexity.php:30
 msgid "Minimum password length"
@@ -3471,7 +3471,7 @@ msgstr "Archivieren"
 
 #: src/templates/sysconfig.html:169
 msgid "This allows users without an account to login into a team and see the experiments with public visibility. It also enables users to share specific entries with a special link."
-msgstr "Damit können sich auch Benutzer ohne Konto in ein Team einloggen und die Experimente öffentlich sehen. Außerdem können Benutzer bestimmte Einträge über einen speziellen Link teilen."
+msgstr "Damit können sich auch Benutzer ohne Konto in eine Organisation einloggen und die Experimente öffentlich sehen. Außerdem können Benutzer bestimmte Einträge über einen speziellen Link teilen."
 
 #: src/templates/team.html:7 src/templates/team.html:78
 #: src/templates/team.html:90
@@ -3685,7 +3685,7 @@ msgstr "Aktiviere Willkommensbanner"
 
 #: src/templates/admin.html:136
 msgid "Display a message to users that recently joined the team."
-msgstr "Anzeigen einer Nachricht für Benutzer, die kürzlich dem Team beigetreten sind."
+msgstr "Anzeigen einer Nachricht für Benutzer, die kürzlich der Organisation beigetreten sind."
 
 #: src/templates/admin.html:139
 msgid "Number of days after registration where a user is considered a newcomer"
@@ -3911,15 +3911,15 @@ msgstr "Zurücksetzen"
 
 #: src/templates/ucp.html:292
 msgid "Always display your own entries, regardless of the current team"
-msgstr "Eigene Einträge immer anzeigen, unabhängig vom aktuellen Team"
+msgstr "Eigene Einträge immer anzeigen, unabhängig von der aktuellen Organisation"
 
 #: src/templates/ucp.html:302
 msgid "Select the scope for teamgroups"
-msgstr "Filterbereich für Team-Gruppen auswählen"
+msgstr "Filterbereich für Projektteams auswählen"
 
 #: src/templates/ucp.html:303
 msgid "This setting controls which teamgroups will be listed in the permission settings window."
-msgstr "Diese Einstellung steuert, welche Team-Gruppen in den Berechtigungseinstellungen aufgelistet werden."
+msgstr "Diese Einstellung steuert, welche Projektteams in den Berechtigungseinstellungen aufgelistet werden."
 
 #: src/templates/view-edit.html:33
 msgid "%s has requested %s for this entity from %s"
@@ -4148,7 +4148,7 @@ msgstr "Mindestens 3 Zeichen sind für die Suche erforderlich"
 
 #: src/Elabftw/i18n4Js.php:219
 msgid "Unarchive and add to team {{team, string}}"
-msgstr "Entarchivieren und hinzufügen zu Team {{team, string}}"
+msgstr "Entarchivieren und zur Organisation {{team, string}} hinzufügen"
 
 #: src/Controllers/ChemEditorController.php:32
 msgid "Chemical Structure Editor"
@@ -4199,23 +4199,23 @@ msgstr "Mengeneinheit"
 #: src/templates/admin.html:28 src/templates/admin.html:501
 #: src/templates/permissions-edit-modal.html:93
 msgid "User Groups"
-msgstr "Benutzergruppen"
+msgstr "Projektteams"
 
 #: src/templates/admin.html:163
 msgid "A User Group can contain users from different teams. Its main use is to later allow giving permissions to this group."
-msgstr "Eine Benutzergruppe kann Benutzer aus verschiedenen Teams enthalten. Ihr Hauptzweck besteht darin, dieser Gruppe später Berechtigungen zu erteilen."
+msgstr "Ein Projektteam kann Benutzer aus verschiedenen Organisationen enthalten. Sein Hauptzweck besteht darin, diesem Projektteam später Berechtigungen zu erteilen."
 
 #: src/templates/admin.html:165
 msgid "Create user group"
-msgstr "Benutzergruppe erstellen"
+msgstr "Projektteam erstellen"
 
 #: src/templates/admin.html:180
 msgid "Existing user groups"
-msgstr "Vorhandene Benutzergruppen"
+msgstr "Vorhandene Projektteams"
 
 #: src/templates/admin.html:183
 msgid "No user group created yet."
-msgstr "Noch keine Benutzergruppe erstellt."
+msgstr "Noch kein Projektteam erstellt."
 
 #: src/templates/view-edit-target-permissions.html:11
 msgid "Lock down read permissions"
@@ -4227,7 +4227,7 @@ msgstr "Schreibberechtigungen sperren"
 
 #: src/templates/admin.html:291
 msgid "From here you can add, edit or delete the tags for your team. Click the tag to edit it."
-msgstr "Hier können Sie Tags für Ihr Team hinzufügen, bearbeiten oder löschen. Klicken Sie auf ein Tag, um es zu bearbeiten."
+msgstr "Hier können Sie Tags für Ihre Organisation hinzufügen, bearbeiten oder löschen. Klicken Sie auf ein Tag, um es zu bearbeiten."
 
 #: src/templates/admin.html:296
 msgid "Allow users to create new tags"
@@ -4247,7 +4247,7 @@ msgstr "Experiment-Tags"
 
 #: src/templates/admin.html:482 src/templates/permissions-edit-modal.html:46
 msgid "This setting sets a baseline upon which you can add more permissions by selecting teams, user groups or users below."
-msgstr "Diese Einstellung legt eine Basis fest, auf deren Grundlage Sie weitere Berechtigungen hinzufügen können, indem Sie unten Teams, Benutzergruppen oder Benutzer auswählen."
+msgstr "Diese Einstellung legt eine Basis fest, auf deren Grundlage Sie weitere Berechtigungen hinzufügen können, indem Sie unten Organisationen, Projektteams oder Benutzer auswählen."
 
 #: src/templates/chem-editor.html:9
 msgid "Add to compounds database"
@@ -4642,11 +4642,11 @@ msgstr "Wählen Sie zwei Revisionen aus, um sie zu vergleichen."
 
 #: src/Services/EmailValidator.php:55
 msgid "An active account already exists with this email. Use the Sysconfig Panel to add user to the requested team."
-msgstr "Unter dieser E-Mail-Adresse ist bereits ein aktives Konto vorhanden. Verwenden Sie das Sysadmin-Kontrollzentrum, um den Benutzer zum gewünschten Team hinzuzufügen."
+msgstr "Unter dieser E-Mail-Adresse ist bereits ein aktives Konto vorhanden. Verwenden Sie das Sysadmin-Kontrollzentrum, um den Benutzer zur gewünschten Organisation hinzuzufügen."
 
 #: src/Services/EmailValidator.php:57
 msgid "An active account already exists with this email. Search for user in the input above without a team filter and use \"Add to team\" action to add the user to your team."
-msgstr "Unter dieser E-Mail-Adresse ist bereits ein aktives Konto vorhanden. Suchen Sie den Benutzer im obigen Eingabefeld ohne Team-Filter und fügen Sie ihn mit der Aktion \"Zum Team hinzufügen\" zu Ihrem Team hinzu."
+msgstr "Unter dieser E-Mail-Adresse ist bereits ein aktives Konto vorhanden. Suchen Sie den Benutzer im obigen Eingabefeld ohne Organisations-Filter und fügen Sie ihn mit der Aktion \"Zur Organisation hinzufügen\" zu Ihrer Organisation hinzu."
 
 #: src/templates/about-elabftw-modal.html:12
 msgid "eLabFTW is a free and open source electronic laboratory notebook crafted by %s and contributors."
@@ -4700,7 +4700,7 @@ msgstr "2FA"
 
 #: src/Elabftw/i18n4Js.php:66
 msgid "Can manage users to teams"
-msgstr "Kann Nutzende Teams zuweisen"
+msgstr "Kann Nutzende Organisationen zuweisen"
 
 #: src/Elabftw/i18n4Js.php:98
 msgid "You must allow at least one permission setting."
@@ -4764,19 +4764,19 @@ msgstr "Speichereinheit mit Containern kann nicht gelöscht werden!"
 
 #: src/Auth/UserLoginValidator.php:58
 msgid "This account is archived in this team and cannot login."
-msgstr "Dieser Account ist in diesem Team archiviert und kann sich nicht anmelden."
+msgstr "Dieser Account ist in dieser Organisation archiviert und kann sich nicht anmelden."
 
 #: web/experiments-categories.php:30
 msgid "Sorry, edition of experiments categories has been disabled for users by your team Admin."
-msgstr "Das Anpassen von Experiment-Kategorien wurde von Ihren Team-Admins deaktiviert."
+msgstr "Das Anpassen von Experiment-Kategorien wurde von Ihren Organisations-Admins deaktiviert."
 
 #: web/experiments-status.php:30
 msgid "Sorry, edition of experiments status has been disabled for users by your team Admin."
-msgstr "Das Anpassen des Experiment-Status wurde von Ihren Team-Admins deaktiviert."
+msgstr "Das Anpassen des Experiment-Status wurde von Ihren Organisations-Admins deaktiviert."
 
 #: web/resources-status.php:31
 msgid "Sorry, edition of resources status has been disabled for users by your team Admin."
-msgstr "Das Anpassen des Ressourcen-Status wurde von Ihren Team-Admins deaktiviert."
+msgstr "Das Anpassen des Ressourcen-Status wurde von Ihren Organisations-Admins deaktiviert."
 
 #: src/templates/admin.html:80
 msgid "Users will be forced to select an existing Template, and will not be able to create a blank entry."
@@ -4859,11 +4859,11 @@ msgstr "Die Aktivierung von Sysadmin-Rechten ermöglicht uneingeschränkte Syste
 
 #: src/templates/edit-user-modal.html:39 src/templates/edit-user-modal.html:40
 msgid "Can manage users/teams association"
-msgstr "Kann die Zuordnung von Nutzenden zu Teams bearbeiten."
+msgstr "Kann die Zuordnung von Nutzenden zu Organisationen bearbeiten."
 
 #: src/templates/edit-user-modal.html:45
 msgid "Enable this to allow user to manage association between users and teams. Note: user must be Admin in at least one team."
-msgstr "Diese Einstellung erlaubt es, Nutzende mit Teams zu verknüpfen. Die Person muss in mindestens einem Team Admin sein."
+msgstr "Diese Einstellung erlaubt es, Nutzende mit Organisationen zu verknüpfen. Die Person muss in mindestens einer Organisation Admin sein."
 
 #: src/templates/view-edit-target-permissions.html:4
 msgid "Permissions for the derived entry"
@@ -4875,11 +4875,11 @@ msgstr "Doppelklicke eine Zeile in der folgenden Tabelle, um Benutzer zu bearbei
 
 #: src/templates/experiments-categories.html:9
 msgid "Experiments categories can be associated with an Experiment or an Experiment Template as a Category. They belong to a team and have two main properties: name and color. Examples: Analysis, Measurement, Test, Project XYZ, etc..."
-msgstr "Experiment-Kategorien können einem Experiment oder einer Vorlage zugeordnet werden. Sie gehören zu einem Team und haben zwei Eigenschaften: Name und Farbe. Zum Beispiel: Analyse, Messung, Test, Projekt XYZ usw."
+msgstr "Experiment-Kategorien können einem Experiment oder einer Vorlage zugeordnet werden. Sie gehören zu einer Organisation und haben zwei Eigenschaften: Name und Farbe. Zum Beispiel: Analyse, Messung, Test, Projekt XYZ usw."
 
 #: src/templates/experiments-categories.html:11
 msgid "No experiments categories have been created in this team yet."
-msgstr "In diesem Team wurden noch keine Experimentkategorien erstellt."
+msgstr "In dieser Organisation wurden noch keine Experimentkategorien erstellt."
 
 #: src/templates/experiments-categories.html:13
 #: src/templates/resources-categories.html:13
@@ -4888,11 +4888,11 @@ msgstr "Kategoriename"
 
 #: src/templates/experiments-status.html:9
 msgid "Experiments status can be associated with an Experiment or an Experiment Template as a Status. They belong to a team and have two main properties: name and color. Examples: Running, Done, Need to be redone, Failed, etc..."
-msgstr "Experimente-Status können einem Experiment oder einer Experimentvorlage zugeordnet werden. Sie gehören zu einem Team und haben zwei Eigenschaften: Name und Farbe. Beispiele: Läuft, Beendet, Muss wiederholt werden, Fehlgeschlagen usw."
+msgstr "Experimente-Status können einem Experiment oder einer Experimentvorlage zugeordnet werden. Sie gehören zu einer Organisation und haben zwei Eigenschaften: Name und Farbe. Beispiele: Läuft, Beendet, Muss wiederholt werden, Fehlgeschlagen usw."
 
 #: src/templates/experiments-status.html:11
 msgid "No experiments status have been created in this team yet."
-msgstr "In diesem Team wurde noch kein Experimentstatus erstellt."
+msgstr "In dieser Organisation wurde noch kein Experimentstatus erstellt."
 
 #: src/templates/experiments-status.html:13
 #: src/templates/resources-status.html:13
@@ -4973,7 +4973,7 @@ msgstr "Willkommen zur Demo!"
 
 #: src/templates/login-demo.html:30
 msgid "Explore real-life examples of teams in eLabFTW. Select a profile suited to your activity below."
-msgstr "Erkunde Beispiele aus der Praxis von Teams in eLabFTW. Wähle unten ein Profil aus, das zu deiner Tätigkeit passt."
+msgstr "Erkunde Beispiele aus der Praxis von Organisationen in eLabFTW. Wähle unten ein Profil aus, das zu deiner Tätigkeit passt."
 
 #: src/templates/profile.html:130
 msgid "Asc"
@@ -4989,11 +4989,11 @@ msgstr "Erstelle und ändere für Ressourcen verfügbare Kategorien."
 
 #: src/templates/resources-categories.html:9
 msgid "Resources categories can be associated with a Resource or a Resource Template as a Category. They belong to a team and have two main properties: name and color. Examples: Equipment, Chemical, Cell line, Plasmid, Antibody, Microscope, etc..."
-msgstr "Ressourcen-Kategorien können einer Ressource oder einer Vorlage zugeordnet werden. Sie gehören zu einem Team und haben zwei Eigenschaften: Name und Farbe. Zum Beispiel Gerät, Chemikalie, Zelllinie, Plasmid, Antikörper, Mikroskop usw."
+msgstr "Ressourcen-Kategorien können einer Ressource oder einer Vorlage zugeordnet werden. Sie gehören zu einer Organisation und haben zwei Eigenschaften: Name und Farbe. Zum Beispiel Gerät, Chemikalie, Zelllinie, Plasmid, Antikörper, Mikroskop usw."
 
 #: src/templates/resources-categories.html:11
 msgid "No resources categories have been created in this team yet."
-msgstr "In diesem Team wurden noch keine Ressourcenkategorien erstellt."
+msgstr "In dieser Organisation wurden noch keine Ressourcenkategorien erstellt."
 
 #: src/templates/resources-categories.html:12
 msgid "Create new resources category"
@@ -5001,11 +5001,11 @@ msgstr "Erstelle neue Ressourcenkategorie"
 
 #: src/templates/resources-status.html:9
 msgid "Resources status can be associated with a Resource or a Resource Template. They belong to a team and have two main properties: name and color. Examples: In stock, Operational, Maintenance, Processed, etc..."
-msgstr "Ressourcen-Status können einer Ressource oder einer Ressourcenvorlage zugeordnet werden. Sie gehören zu einem Team und haben zwei Eigenschaften: Name und Farbe. Beispiele: Verfügbar, In Betrieb, Wartung, Verarbeitet usw."
+msgstr "Ressourcen-Status können einer Ressource oder einer Ressourcenvorlage zugeordnet werden. Sie gehören zu einer Organisation und haben zwei Eigenschaften: Name und Farbe. Beispiele: Verfügbar, In Betrieb, Wartung, Verarbeitet usw."
 
 #: src/templates/resources-status.html:11
 msgid "No resources status have been created in this team yet."
-msgstr "In diesem Team wurde noch kein Ressourcenstatus erstellt."
+msgstr "In dieser Organisation wurde noch kein Ressourcenstatus erstellt."
 
 #: src/templates/scheduler.html:8
 msgid "Book a resource by clicking on the scheduler."
@@ -5035,7 +5035,7 @@ msgstr "Mehr Filter anzeigen"
 
 #: src/templates/show.html:322
 msgid "No resources categories have been defined for your team. Create some from this page: %sResources Categories%s."
-msgstr "Für Ihr Team wurden noch keine Ressourcen-Kategorien definiert. Erstellen Sie sie über diese Seite: %sRessourcen-Kategorien%s."
+msgstr "Für Ihre Organisation wurden noch keine Ressourcen-Kategorien definiert. Erstellen Sie sie über diese Seite: %sRessourcen-Kategorien%s."
 
 #: src/templates/show.html:525
 msgid "Lock the selected entities"
@@ -5213,11 +5213,11 @@ msgstr "Projekt Monoco"
 
 #: src/templates/admin.html:172
 msgid "Teamgroup name"
-msgstr "Team-Gruppenname"
+msgstr "Name des Projektteams"
 
 #: src/templates/admin.html:201 src/templates/admin.html:207
 msgid "Add user to teamgroup"
-msgstr "Nutzer(in) zur Teamgruppe hinzufügen"
+msgstr "Nutzer(in) zum Projektteam hinzufügen"
 
 #: src/templates/bookings-email-modal.html:5
 #: src/templates/bookings-email-modal.html:10
@@ -5372,7 +5372,7 @@ msgstr "Sperre aufheben"
 
 #: src/Elabftw/i18n4Js.php:56
 msgid "Add selected users to team"
-msgstr "Ausgewählte Benutzer zum Team hinzufügen"
+msgstr "Ausgewählte Benutzer zur Organisation hinzufügen"
 
 #: src/Elabftw/i18n4Js.php:165
 msgid "Warning: current OpenCloning version is incompatible with this version of eLabFTW."
@@ -5388,11 +5388,11 @@ msgstr "Aktivieren Sie diese Option, um dem Benutzer die Verwaltung von Lagerort
 
 #: src/templates/editusers.html:9
 msgid "Show users from all teams"
-msgstr "Benutzer aus allen Teams anzeigen"
+msgstr "Benutzer aus allen Organisationen anzeigen"
 
 #: src/templates/head.html:95
 msgid "Team experiments"
-msgstr "Team-Experimente"
+msgstr "Organisations-Experimente"
 
 #: src/Controllers/ExperimentsCategoriesController.php:33
 msgid "Experiment categories"
@@ -5404,7 +5404,7 @@ msgstr "Status des Experiments"
 
 #: src/templates/head.html:132
 msgid "Team resources"
-msgstr "Team-Ressourcen"
+msgstr "Organisations-Ressourcen"
 
 #: src/Controllers/DatabaseController.php:43 src/Enums/EntityType.php:171
 msgid "Resource templates"
@@ -5500,7 +5500,7 @@ msgstr "Unterzeichnen"
 
 #: src/Models/AbstractEntity.php:1149
 msgid "The selected user cannot be assigned ownership in the current team context."
-msgstr "Der ausgewählte Benutzer kann im aktuellen Teamkontext nicht der Besitzer werden."
+msgstr "Der ausgewählte Benutzer kann im aktuellen Organisationskontext nicht der Besitzer werden."
 
 #: src/Models/Dspace.php:204
 msgid "DSpace login did not return an Authorization header."
@@ -5524,7 +5524,7 @@ msgstr "Dieser Schritt ist unveränderbar: er kann nicht verändert werden."
 
 #: web/resources-categories.php:30
 msgid "Sorry, edition of resources categories has been disabled for users by your team Admin."
-msgstr "Entschuldigung, das Verändern von Ressourcen-Kategorien durch Benutzer wurden durch Ihren Team-Administrator deaktiviert."
+msgstr "Entschuldigung, das Verändern von Ressourcen-Kategorien durch Benutzer wurden durch Ihren Organisations-Administrator deaktiviert."
 
 #: src/templates/admin.html:322 src/templates/admin.html:338
 #: src/templates/admin.html:339 src/templates/favtags-panel.html:17
@@ -5810,7 +5810,7 @@ msgstr "Welches Attribut sollte für den Nachnamen verwendet werden?"
 
 #: src/templates/idp-modal.html:47
 msgid "Which attribute should be used for the team name? (optional)"
-msgstr "Welches Attribut soll für den Teamnamen verwendet werden? (optional)"
+msgstr "Welches Attribut soll für den Organisationsnamen verwendet werden? (optional)"
 
 #: src/templates/idp-modal.html:54
 msgid "Which attribute should be used for the internal id (optional)"
@@ -5826,7 +5826,7 @@ msgstr "Sie sind dabei, die Rechte an diesem Eintrag auf einen anderen Benutzer 
 
 #: src/templates/ownership-transfer-modal.html:27
 msgid "As an admin, you can select the team associated with the user who will receive ownership. Please note that once transferred to another team, the entry is managed by that team’s administrators."
-msgstr "Als Administrator können Sie das Team auswählen, das mit dem Benutzer verbunden ist und das Eigentum an dem Eintrag erhalten soll. Bitte beachten Sie, dass der Eintrag, sobald er an ein anderes Team übertragen wurde, von den Administratoren des anderen Teams verwaltet wird."
+msgstr "Als Administrator können Sie die Organisation auswählen, die mit dem Benutzer verbunden ist und das Eigentum an dem Eintrag erhalten soll. Bitte beachten Sie, dass der Eintrag, sobald er an eine andere Organisation übertragen wurde, von den Administratoren der anderen Organisation verwaltet wird."
 
 #: src/templates/ownership-transfer-modal.html:44
 msgid "Current owner"
@@ -6001,7 +6001,7 @@ msgstr "Geben Sie Ihren Text hier ein"
 
 #: src/templates/sysconfig.html:1099
 msgid "Synchronize the local teams with the teams sent by LDAP server"
-msgstr "Lokale Teams mit vom LDAP-Server gesendeten Teams synchronisieren"
+msgstr "Lokale Organisationen mit vom LDAP-Server gesendeten Organisationen synchronisieren"
 
 #: src/templates/ucp.html:380
 msgid "Multi-factor authentication secret"
@@ -6021,7 +6021,7 @@ msgstr "Aufgabe hinzufügen"
 
 #: src/Elabftw/i18n4Js.php:58
 msgid "All teams"
-msgstr "Alle Teams"
+msgstr "Alle Organisationen"
 
 #: src/Elabftw/i18n4Js.php:61
 msgid "Association date"
@@ -6057,7 +6057,7 @@ msgstr "ID"
 
 #: src/Elabftw/i18n4Js.php:153
 msgid "My teams"
-msgstr "Meine Teams"
+msgstr "Meine Organisationen"
 
 #: src/Elabftw/i18n4Js.php:156
 msgid "A new version is available!"
@@ -6081,11 +6081,11 @@ msgstr "Versionshinweise lesen"
 
 #: src/Elabftw/i18n4Js.php:184
 msgid "These RORs apply to the whole instance and are inherited by all teams."
-msgstr "Diese RORs gelten für die gesamte Instanz und werden an alle Teams vererbt."
+msgstr "Diese RORs gelten für die gesamte Instanz und werden an alle Organisationen vererbt."
 
 #: src/Elabftw/i18n4Js.php:185
 msgid "These RORs apply only to the current team."
-msgstr "Diese RORs gelten nur für das aktuelle Team."
+msgstr "Diese RORs gelten nur für die aktuelle Organisation."
 
 #: src/Elabftw/i18n4Js.php:186
 msgid "These RORs apply only to your account."
@@ -6121,15 +6121,15 @@ msgstr "Ressourcen"
 
 #: src/Models/AbstractConcreteEntity.php:53
 msgid "Your team administrator has disabled creating %s without using a template."
-msgstr "Ihr Team-Administrator hat das Erstellen von %s ohne Vorlage deaktiviert."
+msgstr "Ihr Organisations-Administrator hat das Erstellen von %s ohne Vorlage deaktiviert."
 
 #: src/Models/AbstractEntity.php:1420
 msgid "You cannot change the team parameter for ownership. Only an administrator can perform cross-team transfers."
-msgstr "Sie können das Team für die Eigentümerschaft nicht ändern. Nur ein Administrator kann Übertragungen zwischen Teams durchführen."
+msgstr "Sie können die Organisation für die Eigentümerschaft nicht ändern. Nur ein Administrator kann Übertragungen zwischen Organisationen durchführen."
 
 #: src/Models/AbstractEntity.php:1425
 msgid "The selected user is not a member of your team or the specified target team."
-msgstr "Der ausgewählte Benutzer ist weder Mitglied Ihres Teams noch des angegebenen Zielteams."
+msgstr "Der ausgewählte Benutzer ist weder Mitglied Ihrer Organisation noch der angegebenen Zielorganisation."
 
 #: src/Elabftw/MetadataHelpers.php:148 src/Elabftw/MetadataHelpers.php:152
 msgid "Invalid metadata JSON provided."
@@ -6172,25 +6172,25 @@ msgstr "Research Organization Registry (ROR)"
 #: src/templates/permissions-edit-modal.html:81
 #: src/templates/permissions-edit-modal.html:88
 msgid "Search for user team"
-msgstr "Nach Team des Benutzers suchen"
+msgstr "Nach Organisation des Benutzers suchen"
 
 #: src/templates/admin.html:498 src/templates/permissions-edit-modal.html:88
 msgid "Search for teams"
-msgstr "Nach Teams suchen"
+msgstr "Nach Organisationen suchen"
 
 #: src/templates/admin.html:502 src/templates/permissions-edit-modal.html:99
 msgid "Selecting a user group here will give access to all users of this group."
-msgstr "Wenn Sie hier eine Benutzergruppe auswählen, erhalten alle Benutzer dieser Gruppe Zugriff."
+msgstr "Wenn Sie hier ein Projektteam auswählen, erhalten alle Mitglieder dieses Projektteams Zugriff."
 
 #: src/templates/admin.html:505 src/templates/admin.html:510
 #: src/templates/permissions-edit-modal.html:102
 #: src/templates/permissions-edit-modal.html:108
 msgid "Search for user group"
-msgstr "Nach Benutzergruppe suchen"
+msgstr "Nach Projektteam suchen"
 
 #: src/templates/admin.html:510 src/templates/permissions-edit-modal.html:108
 msgid "Search for user groups"
-msgstr "Nach Benutzergruppen suchen"
+msgstr "Nach Projektteams suchen"
 
 #: src/templates/admin.html:514 src/templates/permissions-edit-modal.html:112
 msgid "You can select specific users to give access to."
@@ -6301,11 +6301,11 @@ msgstr "Zur obersten Ebene verschieben"
 
 #: src/templates/ownership-transfer-modal.html:7
 msgid "You are about to transfer ownership of the selected entries to another user of your team. Ownership of the entries and all associated content (including uploads, comments, and links) will be transferred."
-msgstr "Sie sind dabei, das Eigentum an den ausgewählten Einträgen auf einen anderen Benutzer Ihres Teams zu übertragen. Das Eigentum an den Einträgen und allen zugehörigen Inhalten (einschließlich Uploads, Kommentaren und Verknüpfungen) wird übertragen."
+msgstr "Sie sind dabei, das Eigentum an den ausgewählten Einträgen auf einen anderen Benutzer Ihrer Organisation zu übertragen. Das Eigentum an den Einträgen und allen zugehörigen Inhalten (einschließlich Uploads, Kommentaren und Verknüpfungen) wird übertragen."
 
 #: src/templates/ownership-transfer-modal.html:9
 msgid "You are about to transfer ownership of this entry to another user. After the transfer, they will become the owner, and you may lose access if you do not have permission to view it. If you want to transfer an entry to another team, contact an Admin."
-msgstr "Sie sind dabei, das Eigentum an diesem Eintrag auf einen anderen Benutzer zu übertragen. Nach der Übertragung wird dieser Benutzer zum Besitzer, und Sie verlieren möglicherweise den Zugriff, wenn Sie keine Berechtigung zum Anzeigen haben. Wenn Sie einen Eintrag an ein anderes Team übertragen möchten, wenden Sie sich an einen Admin."
+msgstr "Sie sind dabei, das Eigentum an diesem Eintrag auf einen anderen Benutzer zu übertragen. Nach der Übertragung wird dieser Benutzer zum Besitzer, und Sie verlieren möglicherweise den Zugriff, wenn Sie keine Berechtigung zum Anzeigen haben. Wenn Sie einen Eintrag an eine andere Organisation übertragen möchten, wenden Sie sich an einen Admin."
 
 #: src/templates/pdf.html:60
 msgid "This document has been last signed by %s on %s."
@@ -6321,7 +6321,7 @@ msgstr "Zugehörige Organisationen:"
 
 #: src/templates/permissions-edit-modal.html:54
 msgid "Additionally, you can pair the Base permissions with specific combinations of teams, users, or user groups."
-msgstr "Zusätzlich können Sie die Basisberechtigungen mit bestimmten Kombinationen aus Teams, Benutzern oder Benutzergruppen kombinieren."
+msgstr "Zusätzlich können Sie die Basisberechtigungen mit bestimmten Kombinationen aus Organisationen, Benutzern oder Projektteams kombinieren."
 
 #: src/templates/permissions-edit-modal.html:146
 msgid "Apply to Read & Write"
@@ -6403,11 +6403,11 @@ msgstr "Metadaten"
 
 #: src/templates/show.html:170 src/templates/show.html:171
 msgid "Filter group"
-msgstr "Filtergruppe"
+msgstr "Projektteam filtern"
 
 #: src/templates/show.html:172
 msgid "Select group"
-msgstr "Gruppe auswählen"
+msgstr "Projektteam auswählen"
 
 #: src/templates/show.html:200
 msgid "Date to"
@@ -6526,7 +6526,7 @@ msgstr "Eintrag wurde von %s am %s um %s signiert"
 
 #: src/Auth/LoginFlow.php:38
 msgid "This account is archived in all teams and cannot login."
-msgstr "Dieses Konto ist in allen Teams archiviert; eine Anmeldung ist nicht möglich."
+msgstr "Dieses Konto ist in allen Organisationen archiviert; eine Anmeldung ist nicht möglich."
 
 #. GPT: «extra_fields» peut être traduit, mais je le garde tel quel car il ressemble à un nom de champ technique.
 #: src/Elabftw/MetadataHelpers.php:125
@@ -6645,7 +6645,7 @@ msgstr "Diese Aktion ist für einen archivierten Eintrag nicht erlaubt."
 
 #: src/Models/AbstractStatus.php:150
 msgid "Only a team Admin can modify the visibility."
-msgstr "Nur ein Team-Admin kann die Sichtbarkeit ändern."
+msgstr "Nur ein Organisations-Admin kann die Sichtbarkeit ändern."
 
 #: src/templates/admin.html:98
 msgid "Allow users to create and edit experiment status"
@@ -6713,11 +6713,11 @@ msgstr "Ende des Haupttexts"
 
 #: src/templates/experiments-status.html:9
 msgid "Experiment status can be associated with an Experiment or an Experiment Template as a Status. They belong to a team and have two main properties: name and color. Examples: Running, Done, Need to be redone, Failed, etc..."
-msgstr "Experiment-Status können einem Experiment oder einer Experimentvorlage als Status zugeordnet werden. Sie gehören zu einem Team und haben zwei Haupteigenschaften: Name und Farbe. Beispiele: Läuft, Beendet, Muss wiederholt werden, Fehlgeschlagen usw."
+msgstr "Experiment-Status können einem Experiment oder einer Experimentvorlage als Status zugeordnet werden. Sie gehören zu einer Organisation und haben zwei Haupteigenschaften: Name und Farbe. Beispiele: Läuft, Beendet, Muss wiederholt werden, Fehlgeschlagen usw."
 
 #: src/templates/experiments-status.html:11
 msgid "No experiment status have been created in this team yet."
-msgstr "In diesem Team wurden noch keine Experiment-Status erstellt."
+msgstr "In dieser Organisation wurden noch keine Experiment-Status erstellt."
 
 #: src/templates/experiments-status.html:12
 msgid "Create new experiment status"
@@ -6779,11 +6779,11 @@ msgstr "Mindestens ein Sonderzeichen"
 
 #: src/templates/resources-categories.html:9
 msgid "Resource categories can be associated with a Resource or a Resource Template as a Category. They belong to a team and have two main properties: name and color. Examples: Equipment, Chemical, Cell line, Plasmid, Antibody, Microscope, etc..."
-msgstr "Ressourcen-Kategorien können einer Ressource oder einer Ressourcenvorlage als Kategorie zugeordnet werden. Sie gehören zu einem Team und haben zwei Haupteigenschaften: Name und Farbe. Beispiele: Gerät, Chemikalie, Zelllinie, Plasmid, Antikörper, Mikroskop usw."
+msgstr "Ressourcen-Kategorien können einer Ressource oder einer Ressourcenvorlage als Kategorie zugeordnet werden. Sie gehören zu einer Organisation und haben zwei Haupteigenschaften: Name und Farbe. Beispiele: Gerät, Chemikalie, Zelllinie, Plasmid, Antikörper, Mikroskop usw."
 
 #: src/templates/resources-categories.html:11
 msgid "No resource categories have been created in this team yet."
-msgstr "In diesem Team wurden noch keine Ressourcen-Kategorien erstellt."
+msgstr "In dieser Organisation wurden noch keine Ressourcen-Kategorien erstellt."
 
 #: src/templates/resources-categories.html:12
 msgid "Create new resource category"
@@ -6791,11 +6791,11 @@ msgstr "Neue Ressourcen-Kategorie erstellen"
 
 #: src/templates/resources-status.html:9
 msgid "Resource status can be associated with a Resource or a Resource Template. They belong to a team and have two main properties: name and color. Examples: In stock, Operational, Maintenance, Processed, etc..."
-msgstr "Ressourcen-Status können einer Ressource oder einer Ressourcenvorlage zugeordnet werden. Sie gehören zu einem Team und haben zwei Haupteigenschaften: Name und Farbe. Beispiele: Verfügbar, In Betrieb, Wartung, Verarbeitet usw."
+msgstr "Ressourcen-Status können einer Ressource oder einer Ressourcenvorlage zugeordnet werden. Sie gehören zu einer Organisation und haben zwei Haupteigenschaften: Name und Farbe. Beispiele: Verfügbar, In Betrieb, Wartung, Verarbeitet usw."
 
 #: src/templates/resources-status.html:11
 msgid "No resource status have been created in this team yet."
-msgstr "In diesem Team wurden noch keine Ressourcen-Status erstellt."
+msgstr "In dieser Organisation wurden noch keine Ressourcen-Status erstellt."
 
 #: src/templates/selected-entities-delete-modal.html:5
 msgid "Delete your entries"

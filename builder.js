@@ -23,7 +23,6 @@ const mathjaxNewcmRoot = path.resolve(
   ),
   '..',
 );
-
 module.exports = (env, argv) => {
   const mode = argv.mode ?? 'production';
   const isDevelopment = mode === 'development';
@@ -74,6 +73,9 @@ module.exports = (env, argv) => {
         'prismjs/components/prism-tcl.js',
         'prismjs/components/prism-vhdl.js',
         'prismjs/components/prism-yaml.js',
+      ],
+      excalidraw: [
+        './src/ts/excalidraw-editor.jsx',
       ],
       spreadsheet: [
         './src/ts/spreadsheet-editor.jsx',
@@ -140,6 +142,13 @@ module.exports = (env, argv) => {
             noErrorOnMissing: false,
           },
           {
+            // self-hosted fonts for the whiteboard editor (see EXCALIDRAW_ASSET_PATH)
+            from: '/var/cache/elabftw/yarn/unplugged/@excalidraw-excalidraw-*/node_modules/@excalidraw/excalidraw/dist/prod/fonts/**/*',
+            // keep the folder structure below fonts/
+            to: ({ absoluteFilename }) => `excalidraw/fonts/${absoluteFilename.split('/dist/prod/fonts/')[1]}`,
+            noErrorOnMissing: false,
+          },
+          {
             from: path.join(mathjaxNewcmRoot, 'svg', 'dynamic'),
             to: 'mathjax/mathjax-newcm-font/svg/dynamic',
             noErrorOnMissing: false,
@@ -159,6 +168,13 @@ module.exports = (env, argv) => {
     },
     module: {
       rules:[
+        { // excalidraw ships ESM that imports roughjs without file extensions
+          test: /\.m?js$/,
+          include: /@excalidraw/,
+          resolve: {
+            fullySpecified: false,
+          },
+        },
         { // ts loader
           test: /\.ts$/,
           use: {

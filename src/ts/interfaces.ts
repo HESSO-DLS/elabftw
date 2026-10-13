@@ -201,6 +201,7 @@ enum Target {
 enum FileType {
   Csv = 'csv',
   Eln = 'eln',
+  Excalidraw = 'excalidraw',
   Html = 'html',
   Json = 'json',
   Ods = 'ods',

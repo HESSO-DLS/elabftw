@@ -1,0 +1,9 @@
+/* excalidraw needs a container with a defined height */
+html,
+body,
+#excalidrawEditorRoot {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+}

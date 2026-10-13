@@ -60,6 +60,9 @@
       {# SHEET EDITOR #}
       {% set isSheet = ext in constant('Elabftw\\Elabftw\\Extensions::SPREADSHEET') %}
       <button type='button' class='dropdown-item' {% if not isSheet %}disabled{% endif %} data-action='xls-load-file' data-uploadid='{{ upload.id }}' data-storage='{{ upload.storage }}' data-path='{{ upload.long_name|e('html_attr') }}' data-name='{{ upload.real_name|e('html_attr') }}'><i class='fas fa-fw fa-file-excel mr-1'></i>{{ 'Spreadsheet editor'|trans }}</button>
+      {# WHITEBOARD EDITOR #}
+      {% set isWhiteboard = ext matches '/^excalidraw$/i' %}
+      <button type='button' class='dropdown-item' {% if not isWhiteboard %}disabled{% endif %} data-action='excalidraw-load-file' data-uploadid='{{ upload.id }}' data-storage='{{ upload.storage }}' data-path='{{ upload.long_name|e('html_attr') }}' data-name='{{ upload.real_name|e('html_attr') }}'><i class='fas fa-fw fa-chalkboard mr-1'></i>{{ 'Whiteboard editor'|trans }}</button>
 
       {# NMRium #}
       {% set isJdx = ext matches '/jdx$/i' %}

@@ -31,6 +31,7 @@ import { entity } from './getEntity';
 import { notify } from './notify';
 import { read as readXlsx, utils as xlsxUtils } from '@e965/xlsx';
 import { on } from './handlers';
+import './excalidraw';
 type Cell = string | number | boolean | null;
 let spreadsheetUpload: { id: number; name: string } | null = null;
 let spreadsheetDirty = false;

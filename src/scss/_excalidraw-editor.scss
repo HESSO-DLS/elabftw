@@ -1,0 +1,13 @@
+/* whiteboard editor iframe */
+#excalidrawEditorFrame {
+  height: 600px;
+  min-height: 300px;
+  overflow: hidden;
+  resize: vertical;
+
+  iframe {
+    border: 0;
+    height: 100%;
+    width: 100%;
+  }
+}

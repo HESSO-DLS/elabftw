@@ -106,7 +106,7 @@ const GridExample = () => {
         { field: 'inchi', headerName: 'InChI' },
         { field: 'inchi_key', headerName: 'InChI Key' },
         { field: 'userid_human', headerName: 'Owner' },
-        { field: 'team_name', headerName: 'Team' },
+        { field: 'team_name', headerName: i18next.t('team') },
         { field: 'modified_at', headerName: 'Modified at' },
         { field: 'has_fingerprint', headerName: 'Has fingerprint' },
         { field: 'is_corrosive', headerName: 'Corrosive' },

@@ -1,0 +1,289 @@
+#
+msgid ""
+msgstr ""
+"Language: en_US\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This account is archived in all teams and cannot login."
+msgstr "This account is archived in all organizations and cannot login."
+
+msgid "This account is archived in this team and cannot login."
+msgstr "This account is archived in this organization and cannot login."
+
+msgid "Your account has expired. Contact your team Admin to extend its validity."
+msgstr "Your account has expired. Contact your organization Admin to extend its validity."
+
+msgid "Your account is not validated. An admin of your team needs to validate it!"
+msgstr "Your account is not validated. An admin of your organization needs to validate it!"
+
+msgid "Add team"
+msgstr "Add organization"
+
+msgid "Add selected users to team"
+msgstr "Add selected users to organization"
+
+msgid "All teams"
+msgstr "All organizations"
+
+msgid "Can manage users to teams"
+msgstr "Can manage users to organizations"
+
+msgid "My teams"
+msgstr "My organizations"
+
+msgid "These RORs apply to the whole instance and are inherited by all teams."
+msgstr "These RORs apply to the whole instance and are inherited by all organizations."
+
+msgid "These RORs apply only to the current team."
+msgstr "These RORs apply only to the current organization."
+
+msgid "Team"
+msgstr "Organization"
+
+msgid "Teams"
+msgstr "Organizations"
+
+msgid "Unarchive and add to team {{team, string}}"
+msgstr "Unarchive and add to organization {{team, string}}"
+
+msgid "Only members of the team"
+msgstr "Only members of the organization"
+
+msgid "Your team administrator has disabled creating %s without using a template."
+msgstr "Your organization administrator has disabled creating %s without using a template."
+
+msgid "You cannot change the team parameter for ownership. Only an administrator can perform cross-team transfers."
+msgstr "You cannot change the organization parameter for ownership. Only an administrator can perform cross-organization transfers."
+
+msgid "The selected user is not a member of your team or the specified target team."
+msgstr "The selected user is not a member of your organization or the specified target organization."
+
+msgid "Only a team Admin can modify the visibility."
+msgstr "Only an organization Admin can modify the visibility."
+
+msgid "Hi. Your account has been created but it is currently inactive (you cannot log in). The team admin has been notified and will validate your account. You will receive an email when it is done."
+msgstr "Hi. Your account has been created but it is currently inactive (you cannot log in). The organization admin has been notified and will validate your account. You will receive an email when it is done."
+
+msgid "New user added to team: %s"
+msgstr "New user added to organization: %s"
+
+msgid "An active account already exists with this email. Use the Sysconfig Panel to add user to the requested team."
+msgstr "An active account already exists with this email. Use the Sysconfig Panel to add user to the requested organization."
+
+msgid "An active account already exists with this email. Search for user in the input above without a team filter and use \"Add to team\" action to add the user to your team."
+msgstr "An active account already exists with this email. Search for user in the input above without an organization filter and use \"Add to organization\" action to add the user to your organization."
+
+msgid "One or several user accounts in your team will expire soon. Their account will become inaccessible (archived). All their data will still be visible to others."
+msgstr "One or several user accounts in your organization will expire soon. Their account will become inaccessible (archived). All their data will still be visible to others."
+
+msgid "New user added to your team"
+msgstr "New user added to your organization"
+
+msgid "User Groups"
+msgstr "Project Teams"
+
+msgid "Configure your Team"
+msgstr "Configure your Organization"
+
+msgid "Display a message to users that recently joined the team."
+msgstr "Display a message to users that recently joined the organization."
+
+msgid "A User Group can contain users from different teams. Its main use is to later allow giving permissions to this group."
+msgstr "A Project Team can contain users from different organizations. Its main use is to later allow giving permissions to this project team."
+
+msgid "Create user group"
+msgstr "Create project team"
+
+msgid "Add a group"
+msgstr "Add a project team"
+
+msgid "Teamgroup name"
+msgstr "Project team name"
+
+msgid "Existing user groups"
+msgstr "Existing project teams"
+
+msgid "No user group created yet."
+msgstr "No project team created yet."
+
+msgid "Add user to teamgroup"
+msgstr "Add user to project team"
+
+msgid "From here you can add, edit or delete the tags for your team. Click the tag to edit it."
+msgstr "From here you can add, edit or delete the tags for your organization. Click the tag to edit it."
+
+msgid "Manage tags of the team"
+msgstr "Manage tags of the organization"
+
+msgid "Tags of the team"
+msgstr "Tags of the organization"
+
+msgid "This setting sets a baseline upon which you can add more permissions by selecting teams, user groups or users below."
+msgstr "This setting sets a baseline upon which you can add more permissions by selecting organizations, project teams or users below."
+
+msgid "Selecting a team here will give access to all members of this team."
+msgstr "Selecting an organization here will give access to all members of this organization."
+
+msgid "Search for user team"
+msgstr "Search for user organization"
+
+msgid "Search for teams"
+msgstr "Search for organizations"
+
+msgid "Selecting a user group here will give access to all users of this group."
+msgstr "Selecting a project team here will give access to all users of this project team."
+
+msgid "Search for user group"
+msgstr "Search for project team"
+
+msgid "Teamgroup"
+msgstr "Project team"
+
+msgid "Search for user groups"
+msgstr "Search for project teams"
+
+msgid "Can manage users/teams association"
+msgstr "Can manage users/organizations association"
+
+msgid "Enable this to allow user to manage association between users and teams. Note: user must be Admin in at least one team."
+msgstr "Enable this to allow user to manage association between users and organizations. Note: user must be Admin in at least one organization."
+
+msgid "Manage teams for user"
+msgstr "Manage organizations for user"
+
+msgid "Show users from all teams"
+msgstr "Show users from all organizations"
+
+msgid "Experiments categories can be associated with an Experiment or an Experiment Template as a Category. They belong to a team and have two main properties: name and color. Examples: Analysis, Measurement, Test, Project XYZ, etc..."
+msgstr "Experiments categories can be associated with an Experiment or an Experiment Template as a Category. They belong to an organization and have two main properties: name and color. Examples: Analysis, Measurement, Test, Project XYZ, etc..."
+
+msgid "No experiments categories have been created in this team yet."
+msgstr "No experiments categories have been created in this organization yet."
+
+msgid "Experiment status can be associated with an Experiment or an Experiment Template as a Status. They belong to a team and have two main properties: name and color. Examples: Running, Done, Need to be redone, Failed, etc..."
+msgstr "Experiment status can be associated with an Experiment or an Experiment Template as a Status. They belong to an organization and have two main properties: name and color. Examples: Running, Done, Need to be redone, Failed, etc..."
+
+msgid "No experiment status have been created in this team yet."
+msgstr "No experiment status have been created in this organization yet."
+
+msgid "Team experiments"
+msgstr "Organization experiments"
+
+msgid "Team resources"
+msgstr "Organization resources"
+
+msgid "Switch team"
+msgstr "Switch organization"
+
+msgid "Which attribute should be used for the team name? (optional)"
+msgstr "Which attribute should be used for the organization name? (optional)"
+
+msgid "Explore real-life examples of teams in eLabFTW. Select a profile suited to your activity below."
+msgstr "Explore real-life examples of organizations in eLabFTW. Select a profile suited to your activity below."
+
+msgid "Request access to a team"
+msgstr "Request access to an organization"
+
+msgid "Select a team"
+msgstr "Select an organization"
+
+msgid "Your account is linked to several teams. Select in which team you want to log in"
+msgstr "Your account is linked to several organizations. Select in which organization you want to log in"
+
+msgid "You are about to transfer ownership of the selected entries to another user of your team. Ownership of the entries and all associated content (including uploads, comments, and links) will be transferred."
+msgstr "You are about to transfer ownership of the selected entries to another user of your organization. Ownership of the entries and all associated content (including uploads, comments, and links) will be transferred."
+
+msgid "You are about to transfer ownership of this entry to another user. After the transfer, they will become the owner, and you may lose access if you do not have permission to view it. If you want to transfer an entry to another team, contact an Admin."
+msgstr "You are about to transfer ownership of this entry to another user. After the transfer, they will become the owner, and you may lose access if you do not have permission to view it. If you want to transfer an entry to another organization, contact an Admin."
+
+msgid "As an admin, you can select the team associated with the user who will receive ownership. Please note that once transferred to another team, the entry is managed by that team’s administrators."
+msgstr "As an admin, you can select the organization associated with the user who will receive ownership. Please note that once transferred to another organization, the entry is managed by that organization’s administrators."
+
+msgid "Additionally, you can pair the Base permissions with specific combinations of teams, users, or user groups."
+msgstr "Additionally, you can pair the Base permissions with specific combinations of organizations, users, or project teams."
+
+msgid "Groups"
+msgstr "Project teams"
+
+msgid "Resource categories can be associated with a Resource or a Resource Template as a Category. They belong to a team and have two main properties: name and color. Examples: Equipment, Chemical, Cell line, Plasmid, Antibody, Microscope, etc..."
+msgstr "Resource categories can be associated with a Resource or a Resource Template as a Category. They belong to an organization and have two main properties: name and color. Examples: Equipment, Chemical, Cell line, Plasmid, Antibody, Microscope, etc..."
+
+msgid "No resource categories have been created in this team yet."
+msgstr "No resource categories have been created in this organization yet."
+
+msgid "Resource status can be associated with a Resource or a Resource Template. They belong to a team and have two main properties: name and color. Examples: In stock, Operational, Maintenance, Processed, etc..."
+msgstr "Resource status can be associated with a Resource or a Resource Template. They belong to an organization and have two main properties: name and color. Examples: In stock, Operational, Maintenance, Processed, etc..."
+
+msgid "No resource status have been created in this team yet."
+msgstr "No resource status have been created in this organization yet."
+
+msgid "Members of team %s"
+msgstr "Members of organization %s"
+
+msgid "Members of teamgroup %s"
+msgstr "Members of project team %s"
+
+msgid "Filter group"
+msgstr "Filter project team"
+
+msgid "Select group"
+msgstr "Select project team"
+
+msgid "Create team"
+msgstr "Create organization"
+
+msgid "Enter team name"
+msgstr "Enter organization name"
+
+msgid "This allows users without an account to login into a team and see the experiments with public visibility. It also enables users to share specific entries with a special link."
+msgstr "This allows users without an account to login into an organization and see the experiments with public visibility. It also enables users to share specific entries with a special link."
+
+msgid "Allow Admins to add existing users to their team"
+msgstr "Allow Admins to add existing users to their organization"
+
+msgid "Teams list"
+msgstr "Organizations list"
+
+msgid "This page allows you to edit the teams present on this instance."
+msgstr "This page allows you to edit the organizations present on this instance."
+
+msgid "Create a team"
+msgstr "Create an organization"
+
+msgid "Teams settings"
+msgstr "Organizations settings"
+
+msgid "Synchronize the local teams with the teams sent by IDP"
+msgstr "Synchronize the local organizations with the organizations sent by IDP"
+
+msgid "Create team sent by IDP if it doesn't exist already"
+msgstr "Create organization sent by IDP if it doesn't exist already"
+
+msgid "If no team attribute is found, to which team user is assigned?"
+msgstr "If no organization attribute is found, to which organization user is assigned?"
+
+msgid "Let user select a team"
+msgstr "Let user select an organization"
+
+msgid "What attribute to look for the team name"
+msgstr "What attribute to look for the organization name"
+
+msgid "Create team sent by server if it doesn't exist already"
+msgstr "Create organization sent by server if it doesn't exist already"
+
+msgid "Synchronize the local teams with the teams sent by LDAP server"
+msgstr "Synchronize the local organizations with the organizations sent by LDAP server"
+
+msgid "Show steps for team"
+msgstr "Show steps for organization"
+
+msgid "Always display your own entries, regardless of the current team"
+msgstr "Always display your own entries, regardless of the current organization"
+
+msgid "Select the scope for teamgroups"
+msgstr "Select the scope for project teams"
+
+msgid "This setting controls which teamgroups will be listed in the permission settings window."
+msgstr "This setting controls which project teams will be listed in the permission settings window."

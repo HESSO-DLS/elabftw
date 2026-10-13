@@ -443,7 +443,7 @@ COPY ./containers/elabimg/entrypoint/reload.sh /usr/local/bin/reload
 RUN chmod 555 /usr/local/bin/reload
 
 # add a cache busting query param for spreadsheet iframe assets
-RUN sed -i -e "s/%REPLACED_AT_BUILD_TIME%/$(openssl rand -hex 4)/" /elabftw/web/spreadsheet.html
+RUN sed -i -e "s/%REPLACED_AT_BUILD_TIME%/$(openssl rand -hex 4)/" /elabftw/web/spreadsheet.html /elabftw/web/excalidraw.html
 
 # necessary for s6 if running with read-only flag
 ENV S6_READ_ONLY_ROOT=1
