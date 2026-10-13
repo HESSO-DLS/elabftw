@@ -35,11 +35,26 @@ let lastSaved: Date | null = null;
 // once a save was refused because someone else saved in between, stop autosaving until reload
 let conflict = false;
 
-const setStatus = (text: string, isError = false): void => {
+type StatusKind = 'pending' | 'saving' | 'saved' | 'error';
+const statusIcons: Record<StatusKind, string> = {
+  pending: 'fa-cloud-arrow-up',
+  saving: 'fa-spinner fa-spin',
+  saved: 'fa-check',
+  error: 'fa-triangle-exclamation',
+};
+
+const setStatus = (kind: StatusKind, text: string): void => {
   if (!statusEl) return;
-  statusEl.textContent = text;
-  statusEl.classList.toggle('text-danger', isError);
-  statusEl.classList.toggle('text-muted', !isError);
+  const icon = document.createElement('i');
+  icon.className = `fas fa-fw mr-1 ${statusIcons[kind]}`;
+  icon.setAttribute('aria-hidden', 'true');
+  statusEl.replaceChildren(icon, document.createTextNode(text));
+  statusEl.classList.toggle('text-danger', kind === 'error');
+  statusEl.classList.toggle('text-muted', kind !== 'error');
+};
+
+const hideLoading = (): void => {
+  document.getElementById('excalidrawLoading')?.setAttribute('hidden', 'hidden');
 };
 
 const isIframeMessage = (event: MessageEvent, iframeWindow: Window | null): boolean => {
@@ -136,7 +151,7 @@ const timeOfDay = (date: Date): string => date.toLocaleTimeString([], { hour: '2
 async function save(): Promise<void> {
   if (readonly || conflict || saving || !dirty) return;
   saving = true;
-  setStatus('Saving…');
+  setStatus('saving', 'Saving…');
   try {
     const scene = await requestScene();
     const res = await ApiC.patch(endpoint, {
@@ -151,7 +166,7 @@ async function save(): Promise<void> {
     lastSaved = new Date();
     // the editor compares with the current scene: edits made during the save stay unsaved,
     // otherwise it answers with exd-dirty false and the status becomes "Saved at"
-    setStatus('Unsaved changes');
+    setStatus('pending', 'Will be saved automatically');
     (await getPort()).postMessage({ type: 'exd-saved', hash: scene.hash });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unexpected whiteboard error.';
@@ -159,7 +174,7 @@ async function save(): Promise<void> {
       conflict = true;
       notify.error(message);
     }
-    setStatus(`Not saved: ${message}`, true);
+    setStatus('error', `Not saved: ${message}`);
   } finally {
     saving = false;
   }
@@ -179,9 +194,12 @@ async function init(): Promise<void> {
     if (event.data?.type === 'exd-dirty' && typeof event.data.dirty === 'boolean') {
       dirty = event.data.dirty;
       if (conflict) return;
-      if (dirty) setStatus('Unsaved changes');
-      else if (lastSaved) setStatus(`Saved at ${timeOfDay(lastSaved)}`);
+      if (dirty) setStatus('pending', 'Will be saved automatically');
+      else if (lastSaved) setStatus('saved', `Saved at ${timeOfDay(lastSaved)}`);
+    } else if (event.data?.type === 'exd-loaded') {
+      hideLoading();
     } else if (event.data?.type === 'exd-error' && typeof event.data.message === 'string') {
+      hideLoading();
       notify.error(event.data.message);
     }
   });
@@ -190,7 +208,12 @@ async function init(): Promise<void> {
   port.postMessage({ type: 'exd-load-scene', json: stored.content });
   if (readonly) return;
 
-  setStatus(stored.modified_at ? `Saved at ${timeOfDay(new Date(stored.modified_at.replace(' ', 'T')))}` : 'Changes are saved automatically');
+  if (stored.modified_at) {
+    lastSaved = new Date(stored.modified_at.replace(' ', 'T'));
+    setStatus('saved', `Saved at ${timeOfDay(lastSaved)}`);
+  } else {
+    setStatus('pending', 'Changes are saved automatically');
+  }
   window.setInterval(() => void save(), AUTOSAVE_INTERVAL_MS);
   // save when the user switches tab or minimizes the window
   document.addEventListener('visibilitychange', () => {
@@ -207,6 +230,7 @@ async function init(): Promise<void> {
 
 if (iframe && section) {
   init().catch(error => {
-    setStatus(`Whiteboard not available: ${error instanceof Error ? error.message : error}`, true);
+    hideLoading();
+    setStatus('error', `Whiteboard not available: ${error instanceof Error ? error.message : error}`);
   });
 }

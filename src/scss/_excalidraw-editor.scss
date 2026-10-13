@@ -3,11 +3,27 @@
   height: 600px;
   min-height: 300px;
   overflow: hidden;
+  position: relative;
   resize: vertical;
 
   iframe {
     border: 0;
     height: 100%;
     width: 100%;
+  }
+}
+
+/* shown over the iframe until the editor and the scene are loaded */
+.excalidraw-loading {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: absolute;
+  z-index: 1;
+
+  &[hidden] {
+    display: none;
   }
 }

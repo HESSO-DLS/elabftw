@@ -10,6 +10,9 @@
       </div>
     {% endif %}
     <div id='excalidrawEditorFrame'>
+      <div id='excalidrawLoading' class='excalidraw-loading' role='status' aria-label='{{ 'Loading'|trans }}'>
+        <div class='lds-dual-ring'></div>
+      </div>
       {# allow-modals is needed for confirmation dialogs, clipboard access is for copy/paste of shapes and images #}
       <iframe id='excalidrawIframe' title='{{ 'Whiteboard'|trans }}' data-src='/excalidraw.html' sandbox='allow-scripts allow-modals' allow='clipboard-read; clipboard-write'></iframe>
     </div>

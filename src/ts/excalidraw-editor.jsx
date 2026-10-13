@@ -126,6 +126,7 @@ function ExcalidrawEditor({ lib }) {
       } else if (data?.type === 'exd-load-scene' && typeof data.json === 'string') {
         try {
           await loadScene(data.json);
+          portRef.current?.postMessage({ type: 'exd-loaded' });
         } catch (error) {
           portRef.current?.postMessage({ type: 'exd-error', message: error?.message || 'Could not load whiteboard.' });
         }
