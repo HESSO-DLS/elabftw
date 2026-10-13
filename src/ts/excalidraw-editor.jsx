@@ -73,15 +73,13 @@ function ExcalidrawEditor({ lib }) {
     const excalidrawApi = apiRef.current;
     if (!excalidrawApi) throw new Error('Whiteboard editor is not ready.');
     ignoreChangesRef.current = true;
-    excalidrawApi.resetScene();
-    if (json) {
-      const scene = await loadFromBlob(new Blob([json], { type: 'application/json' }), null, null);
-      excalidrawApi.addFiles(Object.values(scene.files || {}));
-      excalidrawApi.updateScene({
-        elements: scene.elements,
-        appState: { viewBackgroundColor: scene.appState?.viewBackgroundColor ?? '#ffffff' },
-      });
-    }
+    const scene = json ? await loadFromBlob(new Blob([json], { type: 'application/json' }), null, null) : null;
+    // don't use resetScene(): it also resets the app state, view mode included
+    excalidrawApi.addFiles(Object.values(scene?.files || {}));
+    excalidrawApi.updateScene({
+      elements: scene?.elements ?? [],
+      appState: { viewBackgroundColor: scene?.appState?.viewBackgroundColor ?? '#ffffff' },
+    });
     excalidrawApi.history.clear();
     // the section can be collapsed (zero size) on load: fit again once it is shown
     if (window.innerWidth > 0) {
