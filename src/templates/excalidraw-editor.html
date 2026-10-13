@@ -1,9 +1,10 @@
-{# one whiteboard per entity, loaded and autosaved by excalidraw.ts. In view mode it is read-only and hidden when empty #}
-<section id='excalidrawEditor' aria-label='{{ 'Whiteboard'|trans }}' data-readonly='{{ readonly ? '1' : '0' }}'>
-  <h3 data-action='toggle-next' data-scroll-btn='fa-chalkboard' data-scroll-btn-label='{{ 'Whiteboard'|trans }}' data-toggle-target='excalidrawEditorContainer' data-opened-icon='fa-caret-down' data-closed-icon='fa-caret-right' class='d-inline togglable-section-title mt-2' tabindex='0' role='button' aria-expanded='false' aria-controls='excalidrawEditorContainer'>
-    <i id='excalidrawEditorIcon' class='fas fa-caret-right fa-fw mr-2'></i>{{ 'Whiteboard'|trans }}
+{# one whiteboard per entity, loaded and autosaved by excalidraw.ts.
+   Read-only: hidden until excalidraw.ts knows there is something to show, then always expanded #}
+<section id='excalidrawEditor' aria-label='{{ 'Whiteboard'|trans }}' data-readonly='{{ readonly ? '1' : '0' }}' {{ readonly ? 'hidden' }}>
+  <h3 data-action='toggle-next' data-scroll-btn='fa-chalkboard' data-scroll-btn-label='{{ 'Whiteboard'|trans }}' data-toggle-target='excalidrawEditorContainer' data-opened-icon='fa-caret-down' data-closed-icon='fa-caret-right' class='d-inline togglable-section-title mt-2' tabindex='0' role='button' aria-expanded='{{ readonly ? 'true' : 'false' }}' aria-controls='excalidrawEditorContainer'>
+    <i id='excalidrawEditorIcon' class='fas {{ readonly ? 'fa-caret-down' : 'fa-caret-right' }} fa-fw mr-2'></i>{{ 'Whiteboard'|trans }}
   </h3>
-  <div id='excalidrawEditorContainer' class='m-2' hidden data-save-hidden='excalidrawEditorContainer'>
+  <div id='excalidrawEditorContainer' class='m-2' {% if not readonly %}hidden data-save-hidden='excalidrawEditorContainer'{% endif %}>
     {% if not readonly %}
       <div class='d-flex justify-content-end mb-2'>
         <small id='excalidrawStatus' class='text-muted' role='status' aria-live='polite'></small>

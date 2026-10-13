@@ -183,11 +183,9 @@ async function save(): Promise<void> {
 async function init(): Promise<void> {
   const stored = await ApiC.getJson<StoredWhiteboard>(endpoint);
   baseModifiedAt = stored.modified_at;
-  // nothing to show to readers: hide the section and don't load the editor at all
-  if (readonly && !stored.content) {
-    section.hidden = true;
-    return;
-  }
+  // nothing to show to readers: keep the section hidden and don't load the editor at all
+  if (readonly && !stored.content) return;
+  section.hidden = false;
   iframe.src = iframe.dataset.src;
   const port = await getPort();
   port.addEventListener('message', event => {

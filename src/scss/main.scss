@@ -1121,7 +1121,9 @@ the form-control fails to do that so we do the border ourselves */
 }
 
 .edit-mode-label {
-  min-width: 93px;
+  // wide enough for "Organization" (fork wording), and never glued to the value
+  min-width: 135px;
+  margin-right: .5rem;
 
   @media (max-width: 992px) {
     min-width: 0;

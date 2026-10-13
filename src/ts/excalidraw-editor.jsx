@@ -62,10 +62,13 @@ function ExcalidrawEditor({ lib }) {
     setDirty(sceneHash(elements, files) !== savedHashRef.current);
   };
 
-  const fitToContent = () => {
+  // always start at 100% with the drawing centered
+  const centerContent = () => {
     const excalidrawApi = apiRef.current;
-    if (!excalidrawApi || excalidrawApi.getSceneElements().length === 0) return;
-    excalidrawApi.scrollToContent(undefined, { fitToViewport: true, viewportZoomFactor: 0.9 });
+    if (!excalidrawApi) return;
+    excalidrawApi.updateScene({ appState: { zoom: { value: 1 } } });
+    if (excalidrawApi.getSceneElements().length === 0) return;
+    excalidrawApi.scrollToContent(undefined, { animate: false });
   };
 
   // an empty json means the entity has no whiteboard yet
@@ -81,11 +84,11 @@ function ExcalidrawEditor({ lib }) {
       appState: { viewBackgroundColor: scene?.appState?.viewBackgroundColor ?? '#ffffff' },
     });
     excalidrawApi.history.clear();
-    // the section can be collapsed (zero size) on load: fit again once it is shown
+    // the section can be collapsed (zero size) on load: center again once it is shown
     if (window.innerWidth > 0) {
-      fitToContent();
+      centerContent();
     } else {
-      window.addEventListener('resize', fitToContent, { once: true });
+      window.addEventListener('resize', centerContent, { once: true });
     }
     // let excalidraw process the update before we start tracking changes again
     window.setTimeout(() => {
