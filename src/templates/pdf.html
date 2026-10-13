@@ -63,6 +63,13 @@
 
 {{ body|raw }}
 
+{% if whiteboardPreview %}
+  <section class='no-break'>
+    <h3>{{ 'Whiteboard'|trans }}</h3>
+    <img class='whiteboard-image' src='data:image/png;base64,{{ whiteboardPreview }}' alt='{{ 'Whiteboard'|trans }}' />
+  </section>
+{% endif %}
+
 {% if entityData.metadata %}
 <section class='no-break no-list-style'>
   {{ entityData.metadata|formatMetadata }}
@@ -166,13 +173,6 @@
         {% if compound.molecular_weight %}<span style='font-size: 9pt;'>{{ 'Molecular weight'|trans }}: {{ compound.molecular_weight }} g/mol</span><br>{% endif %}
       </div>
     {% endfor %}
-  </section>
-{% endif %}
-
-{% if whiteboardPreview %}
-  <section class='no-break'>
-    <h3>{{ 'Whiteboard'|trans }}</h3>
-    <img class='whiteboard-image' src='data:image/png;base64,{{ whiteboardPreview }}' alt='{{ 'Whiteboard'|trans }}' />
   </section>
 {% endif %}
 

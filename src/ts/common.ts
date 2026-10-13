@@ -910,6 +910,12 @@ on('toggle-next', (el: HTMLElement) => {
 
   // now deal with icon of executor element
   toggleIcon(el, isHidden);
+
+  // tinymce can dock its sticky toolbar while the editor is hidden and keeps it docked once shown again:
+  // a resize makes it recompute the toolbar position
+  if (!isHidden && targetEl.querySelector('.tox-tinymce')) {
+    window.dispatchEvent(new Event('resize'));
+  }
 });
 
 // START STORAGE

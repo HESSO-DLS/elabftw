@@ -106,6 +106,8 @@
 </section>
 
 <hr>
+{% include 'excalidraw-editor.html' with {readonly: Entity.entityData.locked == 1} %}
+
 {# EXTRA FIELDS #}
 {% include('field-builder-modal.html') %}
 <h3 data-action='toggle-next' data-scroll-btn='fa-rectangle-list' data-scroll-btn-label='{{ 'Custom fields'|trans }}' data-opened-icon='fa-caret-down' data-closed-icon='fa-caret-right' class='d-inline togglable-section-title' tabindex='0' role='button' aria-expanded='true'><i class='fas fa-caret-down fa-fw mr-2'></i>{{ 'Custom fields'|trans }}</h3>
@@ -124,8 +126,6 @@
 {% include 'steps-edit.html' %}
 
 {% include 'spreadsheet-editor.html' %}
-
-{% include 'excalidraw-editor.html' with {readonly: Entity.entityData.locked == 1} %}
 
 {% include 'links.html' %}
 

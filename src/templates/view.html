@@ -135,6 +135,8 @@
 
 </section>
 
+{% include 'excalidraw-editor.html' with {readonly: true} %}
+
 <section id='extraFieldsSection'>
 {# METADATA view #}
 {% if Entity.entityData.metadata %}
@@ -149,8 +151,6 @@
 {% include 'uploads.html' %}
 
 {% include 'steps-view.html' %}
-
-{% include 'excalidraw-editor.html' with {readonly: true} %}
 
 {# we only show this section in view mode if there are at least one link #}
 {% if Entity.entityData.experiments_links or Entity.entityData.items_links or Entity.entityData.compounds_links or Entity.entityData.related_experiments_links or Entity.entityData.related_items_links %}
