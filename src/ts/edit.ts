@@ -124,6 +124,8 @@ on('get-next-custom-id', (el: HTMLElement) => {
 });
 
 on('annotate-image', (el: HTMLElement) => {
+  // the doodle section is hidden, it is only used to annotate images
+  document.getElementById('doodleSection').removeAttribute('hidden');
   // show doodle canvas
   const doodleDiv = document.getElementById('doodleDiv');
   doodleDiv.removeAttribute('hidden');
