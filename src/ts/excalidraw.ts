@@ -17,6 +17,8 @@ import { notify } from './notify';
 
 const AUTOSAVE_INTERVAL_MS = 60_000;
 const RESPONSE_TIMEOUT_MS = 30_000;
+const CONNECT_TIMEOUT_MS = 60_000;
+const OFFER_RETRY_MS = 2_000;
 const section = document.getElementById('excalidrawEditor');
 const iframe = document.getElementById('excalidrawIframe') as HTMLIFrameElement;
 const statusEl = document.getElementById('excalidrawStatus');
@@ -68,7 +70,9 @@ const getPort = (): Promise<MessagePort> => {
   if (!iframeWindow) return Promise.reject(new Error('Whiteboard editor is not available.'));
 
   const connection = new Promise<MessagePort>((resolve, reject) => {
+    // a new channel is offered on each exd-ready until one is accepted, so a lost connect message can't block us
     let channel: MessageChannel | null = null;
+    let offeredAt = 0;
     const cleanup = () => {
       window.clearTimeout(timeout);
       window.clearInterval(interval);
@@ -77,28 +81,32 @@ const getPort = (): Promise<MessagePort> => {
     };
     const onMessage = (event: MessageEvent) => {
       if (!isIframeMessage(event, iframeWindow)) return;
-      if (event.data?.type !== 'exd-ready' || channel) return;
-      channel = new MessageChannel();
-      const onConnected = (portEvent: MessageEvent) => {
-        if (portEvent.data?.type !== 'exd-connected') return;
-        channel.port1.removeEventListener('message', onConnected);
+      if (event.data?.type !== 'exd-ready') return;
+      // give the current offer time to be answered before replacing it
+      if (channel && Date.now() - offeredAt < OFFER_RETRY_MS) return;
+      channel?.port1.close();
+      const offered = new MessageChannel();
+      channel = offered;
+      offeredAt = Date.now();
+      offered.port1.onmessage = (portEvent: MessageEvent) => {
+        if (portEvent.data?.type !== 'exd-connected' || channel !== offered) return;
+        offered.port1.onmessage = null;
         cleanup();
-        resolve(channel.port1);
+        resolve(offered.port1);
       };
-      channel.port1.addEventListener('message', onConnected);
-      channel.port1.start();
-      iframeWindow.postMessage({ type: 'exd-connect' }, '*', [channel.port2]);
+      iframeWindow.postMessage({ type: 'exd-connect' }, '*', [offered.port2]);
     };
     const ping = () => iframeWindow.postMessage({ type: 'exd-ping' }, '*');
-    // excalidraw is big, give it time to load on slow connections
+    // excalidraw is big, give it time to load on slow connections or busy computers
     const timeout = window.setTimeout(() => {
       cleanup();
+      channel?.port1.close();
       reject(new Error('Whiteboard editor did not become ready.'));
-    }, RESPONSE_TIMEOUT_MS);
+    }, CONNECT_TIMEOUT_MS);
     const interval = window.setInterval(ping, 250);
 
     window.addEventListener('message', onMessage);
-    iframe.addEventListener('load', ping, { once: true });
+    iframe.addEventListener('load', ping);
     ping();
   });
   portPromise = connection.catch(error => {

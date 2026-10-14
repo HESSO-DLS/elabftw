@@ -338,7 +338,7 @@ replaceSpreadsheetButton?.addEventListener('click', () => {
 });
 
 if (spreadsheetIframe) {
-  void listenForSpreadsheetMessages(event => {
+  listenForSpreadsheetMessages(event => {
     if (event.data?.type === 'jss-dirty' && typeof event.data.dirty === 'boolean') {
       if (event.data.dirty) spreadsheetRevision += 1;
       spreadsheetDirty = event.data.dirty;
@@ -349,7 +349,7 @@ if (spreadsheetIframe) {
       spreadsheetUpload = null;
       replaceSpreadsheetButton.disabled = true;
     }
-  }).catch(error => notify.error(error instanceof Error ? error.message : 'Spreadsheet editor is not available.'));
+  });
 }
 
 window.addEventListener('beforeunload', event => {

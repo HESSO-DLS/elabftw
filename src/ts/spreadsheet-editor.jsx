@@ -76,9 +76,14 @@ function SpreadsheetEditor() {
       if (event.source !== window.parent) return;
       if (event.data?.type === 'jss-ping') {
         window.parent.postMessage({ type: 'jss-ready' }, '*');
-      } else if (event.data?.type === 'jss-connect' && !portRef.current) {
+      } else if (event.data?.type === 'jss-connect') {
         const port = event.ports?.[0];
         if (!port) return;
+        // the parent page reconnects when its previous attempt failed: the newest channel wins
+        if (portRef.current) {
+          portRef.current.removeEventListener('message', onPortMessage);
+          portRef.current.close();
+        }
         portRef.current = port;
         port.addEventListener('message', onPortMessage);
         port.start();
@@ -86,7 +91,8 @@ function SpreadsheetEditor() {
       }
     };
     window.addEventListener('message', onMessage);
-    window.parent.postMessage({ type: 'jss-ready' }, '*');
+    // fresh: sent once when the document starts, so the parent can tell a reload from an answer to its ping
+    window.parent.postMessage({ type: 'jss-ready', fresh: true }, '*');
     return () => {
       window.removeEventListener('message', onMessage);
       portRef.current?.removeEventListener('message', onPortMessage);

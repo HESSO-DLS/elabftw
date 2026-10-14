@@ -148,9 +148,14 @@ function ExcalidrawEditor({ lib }) {
       if (event.source !== window.parent) return;
       if (event.data?.type === 'exd-ping') {
         window.parent.postMessage({ type: 'exd-ready' }, '*');
-      } else if (event.data?.type === 'exd-connect' && !portRef.current) {
+      } else if (event.data?.type === 'exd-connect') {
         const port = event.ports?.[0];
         if (!port) return;
+        // the parent page offers a new channel if it didn't get our answer: the newest one wins
+        if (portRef.current) {
+          portRef.current.removeEventListener('message', onPortMessage);
+          portRef.current.close();
+        }
         portRef.current = port;
         port.addEventListener('message', onPortMessage);
         port.start();

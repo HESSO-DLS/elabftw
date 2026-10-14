@@ -21,6 +21,8 @@ const MAX_SPREADSHEET_ROWS = 100_000;
 const MAX_WORKSHEETS = 1_000;
 const MAX_CELL_LENGTH = 1_000_000;
 const RESPONSE_TIMEOUT_MS = 10_000;
+const CONNECT_TIMEOUT_MS = 60_000;
+const OFFER_RETRY_MS = 2_000;
 let spreadsheetPortPromise: Promise<MessagePort> | null = null;
 
 export const isSpreadsheetIframeMessage = (event: MessageEvent, iframeWindow: Window | null): boolean => {
@@ -116,6 +118,9 @@ export async function loadInSpreadsheetEditor(storage: string, path: string, nam
 }
 
 // helpers
+// listeners survive reconnections: they are attached to every new port
+const spreadsheetListeners: Array<(event: MessageEvent) => void> = [];
+
 const getSpreadsheetEditorPort = (): Promise<MessagePort> => {
   if (spreadsheetPortPromise) return spreadsheetPortPromise;
   const iframe = document.getElementById('spreadsheetIframe') as HTMLIFrameElement;
@@ -123,43 +128,56 @@ const getSpreadsheetEditorPort = (): Promise<MessagePort> => {
   if (!iframeWindow) return Promise.reject(new Error('Spreadsheet editor is not available.'));
 
   const connection = new Promise<MessagePort>((resolve, reject) => {
+    // the channel offered to the iframe; a new one is offered on each jss-ready until one is accepted,
+    // so a lost or ignored jss-connect doesn't leave us waiting until the timeout
     let channel: MessageChannel | null = null;
-    let portMessageHandler: ((event: MessageEvent) => void) | null = null;
+    let offeredAt = 0;
     const cleanup = () => {
       window.clearTimeout(timeout);
       window.clearInterval(interval);
       iframe.removeEventListener('load', ping);
       window.removeEventListener('message', onMessage);
-      if (channel && portMessageHandler) {
-        channel.port1.removeEventListener('message', portMessageHandler);
-      }
     };
     const onMessage = (event: MessageEvent) => {
       if (!isSpreadsheetIframeMessage(event, iframeWindow)) return;
       if (event.data?.type !== 'jss-ready') return;
-      window.clearInterval(interval);
-      iframe.removeEventListener('load', ping);
-      window.removeEventListener('message', onMessage);
-      channel = new MessageChannel();
-      portMessageHandler = (portEvent: MessageEvent) => {
-        if (portEvent.data?.type !== 'jss-connected') return;
+      // give the current offer time to be answered before replacing it
+      if (channel && Date.now() - offeredAt < OFFER_RETRY_MS) return;
+      channel?.port1.close();
+      const offered = new MessageChannel();
+      channel = offered;
+      offeredAt = Date.now();
+      offered.port1.onmessage = (portEvent: MessageEvent) => {
+        if (portEvent.data?.type !== 'jss-connected' || channel !== offered) return;
+        offered.port1.onmessage = null;
         cleanup();
-        channel.port1.start();
-        resolve(channel.port1);
+        spreadsheetListeners.forEach(listener => offered.port1.addEventListener('message', listener));
+        offered.port1.start();
+        // the editor document was reloaded: its end of the channel is gone, connect again
+        const onReload = (readyEvent: MessageEvent) => {
+          if (!isSpreadsheetIframeMessage(readyEvent, iframeWindow)) return;
+          if (readyEvent.data?.type !== 'jss-ready' || readyEvent.data.fresh !== true) return;
+          window.removeEventListener('message', onReload);
+          offered.port1.close();
+          spreadsheetPortPromise = null;
+          void getSpreadsheetEditorPort().catch(error => console.warn(error));
+        };
+        window.addEventListener('message', onReload);
+        resolve(offered.port1);
       };
-      channel.port1.addEventListener('message', portMessageHandler);
-      channel.port1.start();
-      iframeWindow.postMessage({ type: 'jss-connect' }, '*', [channel.port2]);
+      iframeWindow.postMessage({ type: 'jss-connect' }, '*', [offered.port2]);
     };
     const ping = () => iframeWindow.postMessage({ type: 'jss-ping' }, '*');
+    // the iframe loads a big bundle, give it time on slow connections or busy computers
     const timeout = window.setTimeout(() => {
       cleanup();
+      channel?.port1.close();
       reject(new Error('Spreadsheet editor did not become ready.'));
-    }, RESPONSE_TIMEOUT_MS);
+    }, CONNECT_TIMEOUT_MS);
     const interval = window.setInterval(ping, 250);
 
     window.addEventListener('message', onMessage);
-    iframe.addEventListener('load', ping, { once: true });
+    iframe.addEventListener('load', ping);
     ping();
   });
   spreadsheetPortPromise = connection.catch(error => {
@@ -169,10 +187,16 @@ const getSpreadsheetEditorPort = (): Promise<MessagePort> => {
   return spreadsheetPortPromise;
 };
 
-export async function listenForSpreadsheetMessages(listener: (event: MessageEvent) => void): Promise<void> {
-  const port = await getSpreadsheetEditorPort();
-  port.addEventListener('message', listener);
-  port.start();
+// the listener is kept and attached again if the editor has to reconnect
+// connecting in the background is silent: actions that need the editor report errors themselves
+export function listenForSpreadsheetMessages(listener: (event: MessageEvent) => void): void {
+  spreadsheetListeners.push(listener);
+  if (!spreadsheetPortPromise) {
+    void getSpreadsheetEditorPort().catch(error => console.warn(error));
+    return;
+  }
+  // already connected or connecting: add it to the current port too
+  void spreadsheetPortPromise.then(port => port.addEventListener('message', listener), () => {});
 }
 
 export async function sendSpreadsheetMessage(message: object): Promise<void> {
