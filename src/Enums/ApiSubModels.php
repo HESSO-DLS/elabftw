@@ -44,6 +44,7 @@ enum ApiSubModels: string
     case Teamgroups = 'teamgroups';
     case Uploads = 'uploads';
     case Whiteboard = 'whiteboard';
+    case Logbook = 'logbook';
 
     public static function validSubModelsForEndpoint(ApiEndpoint $apiEndpoint): array
     {
@@ -77,6 +78,7 @@ enum ApiSubModels: string
                 self::Tags,
                 self::Uploads,
                 self::Whiteboard,
+                self::Logbook,
             ),
         );
     }

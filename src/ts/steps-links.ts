@@ -23,6 +23,8 @@ import { Action, Target } from './interfaces';
 import { ApiC } from './api';
 import { entity } from './getEntity';
 import { on } from './handlers';
+import { LINK_CREATED_EVENT } from './link-events';
+import type { LinkCreatedDetail } from './link-events';
 
 addAutocompleteToLinkInputs();
 
@@ -164,12 +166,15 @@ $(document).on('keypress blur', '.linkinput', function(e) {
     if (Number.isNaN(target)) {
       return;
     }
-    ApiC.post(`${entity.type}/${entity.id}/${$(this).data('endpoint')}/${target}`).then(() => {
+    const endpoint = String($(this).data('endpoint'));
+    ApiC.post(`${entity.type}/${entity.id}/${endpoint}/${target}`).then(() => {
       reloadElements(['linksDiv', 'linksExpDiv', 'compoundDiv']).then(() => {
         // clear input field
         $(this).val('');
         addAutocompleteToLinkInputs();
         addAutocompleteToCompoundsInputs();
+        // e.g. the instrument logbook asks for an entry when an instrument is linked
+        document.dispatchEvent(new CustomEvent<LinkCreatedDetail>(LINK_CREATED_EVENT, { detail: { endpoint, target } }));
       });
     });
   }

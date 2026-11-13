@@ -1,7 +1,7 @@
 {# required vars:
   link: the link to display
   mode: edit edit-template view etc... #}
-<div class='mt-2 countable hl-hover-superlight p-2 rounded'>
+<div class='mt-2 countable hl-hover-superlight p-2 rounded' data-link-type='{{ link.type }}' data-link-id='{{ link.entityid }}'{% if isRelated|default(false) %} data-link-related='1'{% endif %}>
   {% set randomId = random() %}
   <div class='d-flex mb-1 align-items-center' id='parent_{{ randomId }}'>
     <a href='{{ link.page }}?mode=view&amp;id={{ link.entityid }}' class='mr-auto'>

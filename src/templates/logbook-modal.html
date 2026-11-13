@@ -1,0 +1,36 @@
+{# instrument logbook entry, opened by logbook.ts when an instrument with "Logbook required" is linked.
+   The form is generated from the extra fields of the logbook template linked to that instrument #}
+<div class='modal fade' id='logbookModal' tabindex='-1' role='dialog' aria-labelledby='logbookModalLabel' data-backdrop='static'>
+  <div class='modal-dialog modal-dialog-centered modal-lg' role='document'>
+    <form class='modal-content' id='logbookForm' novalidate>
+      <div class='modal-header'>
+        <div>
+          <h5 class='modal-title' id='logbookModalLabel'>
+            <i class='fas fa-fw fa-clipboard-list mr-1' aria-hidden='true'></i>
+            <span id='logbookModalTitle'>{{ 'Logbook entry'|trans }}</span>
+          </h5>
+          <small class='text-muted'>{{ 'This instrument requires a logbook entry for each use. It will be linked to this experiment.'|trans }}</small>
+        </div>
+        <button type='button' class='close' data-dismiss='modal' aria-label='{{ 'Close'|trans }}'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class='modal-body'>
+        <div class='form-group' id='logbookTemplateGroup' hidden>
+          <label for='logbookTemplateSelect'>{{ 'Logbook template'|trans }}</label>
+          <select id='logbookTemplateSelect' class='form-control'></select>
+        </div>
+        <div id='logbookFields'></div>
+        <div class='form-group mb-0'>
+          <label for='logbookObservations'>{{ 'Observations / issues'|trans }} <small class='text-muted'>({{ 'optional'|trans }})</small></label>
+          <textarea id='logbookObservations' class='form-control' rows='3'></textarea>
+        </div>
+      </div>
+      <div class='modal-footer'>
+        <a id='logbookFullEntry' href='#' class='mr-auto small'>{{ 'Open the full entry instead'|trans }}</a>
+        <button type='button' class='btn btn-ghost' data-dismiss='modal'>{{ 'Later'|trans }}</button>
+        <button type='submit' class='btn btn-primary' id='logbookSave'>{{ 'Save logbook entry'|trans }}</button>
+      </div>
+    </form>
+  </div>
+</div>

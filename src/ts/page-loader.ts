@@ -110,6 +110,13 @@ if (document.getElementById('excalidrawIframe')) {
   );
 }
 
+if (document.getElementById('logbookModal')) {
+  void import(
+    /* webpackChunkName: 'logbook' */
+    './logbook'
+  );
+}
+
 if (window.location.pathname === '/revisions.php') {
   void import(
     /* webpackChunkName: 'revisions' */
