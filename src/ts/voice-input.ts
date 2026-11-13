@@ -10,7 +10,7 @@
  * Speech is ONLY recognized on device (processLocally): if the browser can't do that, the button stays disabled,
  * there is no fallback to a cloud service.
  * - the mic button (or Ctrl+Shift+Space) starts and stops dictation
- * - "LabNote start" / "LabNote stop" voice commands, and a listen mode that waits for "LabNote start"
+ * - "Alo" / "Alo stop" voice commands (voice-commands.ts), and a listen mode that waits for "Alo"
  */
 import tinymce from 'tinymce/tinymce';
 import i18next from './i18n';
@@ -18,6 +18,7 @@ import { ApiC } from './api';
 import { getEditor } from './Editor.class';
 import { getEntity, reloadElements, updateEntityBody } from './misc';
 import { notify } from './notify';
+import { parseCommands, stripCommands } from './voice-commands';
 
 // the Web Speech API types are not in the TS dom lib for all versions: describe what we use
 type Availability = 'unavailable' | 'downloadable' | 'downloading' | 'available';
@@ -68,8 +69,6 @@ const LANG_KEY = 'persistent_voice_lang';
 const LISTEN_KEY = 'persistent_voice_listen';
 const SAVE_DEBOUNCE_MS = 3000;
 
-// "LabNote start" / "LabNote stop", as recognizers tend to hear it
-const COMMAND_RE = /\b(?:lab|lap|labo)\s*-?\s*(?:notes?|knows?|not)\s+(start(?:ed|s)?|stop(?:p|ped|s)?)\b/gi;
 const NEW_PARAGRAPH_RE = /\b(?:new paragraph|nouveau paragraphe|neuer absatz)\b/gi;
 const NEW_LINE_RE = /\b(?:new line|newline|nouvelle ligne|à la ligne|neue zeile)\b/gi;
 
@@ -284,8 +283,8 @@ const renderMode = (): void => {
   statusBox.classList.toggle('voice-status-recording', mode === 'recording');
   if (statusText) {
     statusText.textContent = mode === 'recording'
-      ? t('voice-recording', 'Recording… say "LabNote stop" to stop')
-      : t('voice-listening', 'Listening for "LabNote start"');
+      ? t('voice-recording-alo', 'Recording… say "Alo stop" to stop')
+      : t('voice-listening-alo', 'Listening for "Alo"');
   }
   if (interimEl) interimEl.textContent = '';
 };
@@ -310,20 +309,17 @@ const stopRecording = (manual = false): void => setMode(listenToggle?.checked ? 
 
 // the text of a final result: commands switch mode, the rest is dictated while recording
 const handleFinal = (transcript: string): void => {
-  let cursor = 0;
-  COMMAND_RE.lastIndex = 0;
-  for (const match of transcript.matchAll(COMMAND_RE)) {
-    const before = transcript.slice(cursor, match.index);
-    if (mode === 'recording') dictate(before);
-    cursor = (match.index ?? 0) + match[0].length;
-    if (match[1].toLowerCase().startsWith('start')) {
+  const justStopped = mode === 'listening' && Date.now() - manualStopAt < MANUAL_STOP_GRACE_MS;
+  for (const part of parseCommands(transcript)) {
+    if ('text' in part) {
+      if (mode === 'recording' || justStopped) dictate(part.text);
+    } else if (part.command === 'start') {
+      // "Alo" while recording is ignored (and not inserted)
       if (mode !== 'recording') setMode('recording');
     } else if (mode === 'recording') {
       stopRecording();
     }
   }
-  const justStopped = mode === 'listening' && Date.now() - manualStopAt < MANUAL_STOP_GRACE_MS;
-  if (mode === 'recording' || justStopped) dictate(transcript.slice(cursor));
 };
 
 const createRecognition = (): Recognition | null => {
@@ -350,7 +346,7 @@ const createRecognition = (): Recognition | null => {
       const transcript = result[0]?.transcript ?? '';
       if (result.isFinal) {
         if (recognition === draining) {
-          dictate(transcript.replace(COMMAND_RE, ' '));
+          dictate(stripCommands(transcript));
         } else if (recognition === rec) {
           handleFinal(transcript);
         }
@@ -358,7 +354,7 @@ const createRecognition = (): Recognition | null => {
         interim += transcript;
       }
     }
-    if (interimEl) interimEl.textContent = mode === 'recording' ? interim.replace(COMMAND_RE, '').trim() : '';
+    if (interimEl) interimEl.textContent = mode === 'recording' ? stripCommands(interim) : '';
   };
   recognition.onerror = event => {
     if (event.error === 'no-speech' || event.error === 'aborted') return;
