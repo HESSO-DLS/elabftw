@@ -117,6 +117,13 @@ if (document.getElementById('logbookModal')) {
   );
 }
 
+if (document.getElementById('voiceInput')) {
+  void import(
+    /* webpackChunkName: 'voice-input' */
+    './voice-input'
+  );
+}
+
 if (window.location.pathname === '/revisions.php') {
   void import(
     /* webpackChunkName: 'revisions' */

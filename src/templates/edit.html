@@ -68,6 +68,29 @@
       <div>
         <h3 data-action='toggle-next' data-toggle-target-extra='mainTextEllipsis' data-opened-icon='fa-caret-down' data-closed-icon='fa-caret-right' data-toggle-target='mainTextDiv' class='d-inline togglable-section-title' tabindex='0' role='button' aria-expanded='true'><i class='fas fa-caret-right fa-fw mr-2'></i>{{ 'Main text'|trans }}</h3>
       </div>
+      <div class='d-flex align-items-center'>
+      {# VOICE INPUT: on-device speech recognition only (voice-input.ts) #}
+      <div class='btn-group mr-1' id='voiceInput' role='group' aria-label='{{ 'Voice input'|trans }}'>
+        <button type='button' class='btn btn-ghost voice-mic' id='voiceMicBtn' aria-pressed='false' disabled
+          title='{{ 'Dictate into the main text (Ctrl+Shift+Space)'|trans }}' aria-label='{{ 'Dictate into the main text'|trans }}'>
+          <i class='fas fa-microphone fa-fw' aria-hidden='true'></i>
+        </button>
+        <button type='button' class='btn btn-ghost dropdown-toggle dropdown-toggle-split px-1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' aria-label='{{ 'Voice input options'|trans }}' title='{{ 'Voice input options'|trans }}'></button>
+        <div class='dropdown-menu dropdown-menu-right voice-menu p-3'>
+          <div class='custom-control custom-switch mb-2'>
+            <input type='checkbox' class='custom-control-input' id='voiceListenToggle'>
+            <label class='custom-control-label' for='voiceListenToggle'>{{ 'Listen for "LabNote start"'|trans }}</label>
+          </div>
+          <p class='small text-muted mb-2'>{{ 'Say "LabNote start" to start dictating and "LabNote stop" to stop. Say "new line" or "new paragraph" to break lines.'|trans }}</p>
+          <label for='voiceLangSelect' class='small mb-1'>{{ 'Language'|trans }}</label>
+          <select id='voiceLangSelect' class='form-control form-control-sm mb-2'></select>
+          <div id='voiceModelStatus' class='small mb-2' role='status'></div>
+          <button type='button' class='btn btn-sm btn-primary' id='voiceInstallBtn' hidden>
+            <i class='fas fa-download fa-fw mr-1' aria-hidden='true'></i>{{ 'Download speech model'|trans }}
+          </button>
+          <p class='small text-muted mb-0 mt-2'><i class='fas fa-shield-halved fa-fw mr-1' aria-hidden='true'></i>{{ 'Speech is recognized on this computer, audio is never sent to a server.'|trans }}</p>
+        </div>
+      </div>
       <div class='dropdown' id='mainTextEllipsis'>
         <button class='btn btn-ghost' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' title='{{ 'Main text options'|trans }}' aria-label='{{ 'Main text options'|trans }}' type='button'>
           <i class='fas fa-ellipsis-v fa-fw'></i>
@@ -79,9 +102,17 @@
           </button>
         </div>
       </div>
+      </div>
     </div>
 
     <div data-save-hidden='mainTextDiv' id='mainTextDiv'>
+      {# voice input status: recording or listening for the start command #}
+      <div id='voiceStatus' class='voice-status' role='status' aria-live='polite' hidden>
+        <span class='voice-status-dot' aria-hidden='true'></span>
+        <span id='voiceStatusText'></span>
+        <span id='voiceInterim' class='voice-interim'></span>
+        <button type='button' class='btn btn-sm btn-ghost ml-auto' id='voiceStopBtn'>{{ 'Stop'|trans }}</button>
+      </div>
       <div class='mt-2' id='entityBodyEditorDiv' data-content-type='{{ Entity.entityData.content_type }}'>{# << this div is important around the textarea to fix an issue on mobile editor. See #3107 #}
         {# tinymce or markdown? #}
         {% if Entity.entityData.content_type == '2' %}
