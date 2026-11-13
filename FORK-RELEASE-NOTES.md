@@ -4,6 +4,13 @@ This fork of [eLabFTW](https://github.com/elabftw/elabftw) (branch `excalidraw`)
 `elabftw-custom/elabimg:<eLabFTW version>-excalidraw.<build>`. Upstream changes are listed on the
 [eLabFTW releases page](https://github.com/elabftw/elabftw/releases).
 
+## 6.0.6-excalidraw.11 — 2026-11-13
+
+### Voice input: "Hello" works too
+English speech recognition writes "Alo" as *hello*: **"Hello"** / **"Hello stop"** (and *hallo*, *helo*,
+*hullo*) now work like "Alo" / "Alo stop". Note that a dictated "hello" now starts or stops the recording
+and isn't written in the text.
+
 ## 6.0.6-excalidraw.10 — 2026-11-13
 
 ### Instrument logbook: logbook view, alerts and instrument status

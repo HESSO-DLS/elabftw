@@ -7,12 +7,13 @@
 
 /**
  * Voice commands of the main text dictation (voice-input.ts), kept free of DOM code so it can be tested alone.
- * "Alo" starts recording, "Alo stop" stops it. Recognizers write it allô, allo, alo, hallo or halo.
+ * "Alo" starts recording, "Alo stop" stops it. Recognizers write it allô, allo, alo, hallo, halo,
+ * and in English hello or hullo.
  */
 
 // wake word, optionally followed by a stop word; surrounding punctuation is part of the command
 // (?<!\p{L}) / (?!\p{L}) instead of \b: \b doesn't work next to accented letters like ô
-export const COMMAND_RE = /[\s,;:]*(?<!\p{L})(?:all?[oô]|hall?o|halo)(?!\p{L})(?:[\s,.!?;:]*(stop(?:p|pe|ped|s)?|arr[eê]te?)(?!\p{L}))?[\s,.!?;:]*/giu;
+export const COMMAND_RE = /[\s,;:]*(?<!\p{L})(?:all?[oô]|hall?o|halo|hell?o|hullo)(?!\p{L})(?:[\s,.!?;:]*(stop(?:p|pe|ped|s)?|arr[eê]te?)(?!\p{L}))?[\s,.!?;:]*/giu;
 
 export type VoiceCommand = 'start' | 'stop';
 export type CommandPart = { text: string } | { command: VoiceCommand };
