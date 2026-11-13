@@ -6,6 +6,13 @@
   </h3>
   <div id='excalidrawEditorContainer' class='m-2' {% if not readonly %}hidden data-save-hidden='excalidrawEditorContainer'{% endif %}>
     {% if not readonly %}
+      {# shown by excalidraw.ts when this browser kept a copy that could not be saved (session expired) #}
+      <div id='excalidrawRecovery' class='alert alert-warning d-flex align-items-center' role='alert' hidden>
+        <i class='fas fa-fw fa-life-ring mr-2' aria-hidden='true'></i>
+        <span class='mr-auto'>{{ 'This browser kept a copy of the whiteboard that could not be saved, from'|trans }} <span id='excalidrawRecoveryDate'></span>.</span>
+        <button type='button' id='excalidrawRecoveryRestore' class='btn btn-sm btn-primary ml-2'>{{ 'Restore it'|trans }}</button>
+        <button type='button' id='excalidrawRecoveryDiscard' class='btn btn-sm btn-ghost ml-2'>{{ 'Discard'|trans }}</button>
+      </div>
       <div class='d-flex justify-content-end mb-2'>
         <small id='excalidrawStatus' class='text-muted' role='status' aria-live='polite'></small>
       </div>

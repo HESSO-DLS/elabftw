@@ -163,7 +163,8 @@ function ExcalidrawEditor({ lib }) {
       }
     };
     window.addEventListener('message', onMessage);
-    window.parent.postMessage({ type: 'exd-ready' }, '*');
+    // fresh: sent once when the document starts, so the parent can tell a reload from an answer to its ping
+    window.parent.postMessage({ type: 'exd-ready', fresh: true }, '*');
     return () => {
       window.removeEventListener('message', onMessage);
       portRef.current?.removeEventListener('message', onPortMessage);

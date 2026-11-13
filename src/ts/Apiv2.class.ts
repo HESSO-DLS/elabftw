@@ -12,6 +12,9 @@ import { notify } from './notify';
 
 type ApiParams = Record<string, unknown> | FormData | object | Selected;
 
+// per request options: keepalive for requests sent while the page unloads, signal to abort (timeouts)
+export type ApiRequestInit = { keepalive?: boolean; signal?: AbortSignal };
+
 export class Api {
   // allow forcing the browser to make the request even if page is closed − useful for clearing exclusive edit on window unload
   // it is false by default for two reasons:
@@ -54,12 +57,12 @@ export class Api {
     });
   }
 
-  patch(query: string, params: ApiParams = {}): Promise<Response> {
-    return this.send(Method.PATCH, query, params);
+  patch(query: string, params: ApiParams = {}, init: ApiRequestInit = {}): Promise<Response> {
+    return this.send(Method.PATCH, query, params, init);
   }
 
-  post(query: string, params: ApiParams = {}): Promise<Response> {
-    return this.send(Method.POST, query, params);
+  post(query: string, params: ApiParams = {}, init: ApiRequestInit = {}): Promise<Response> {
+    return this.send(Method.POST, query, params, init);
   }
 
   async post2location(query: string, params = {}): Promise<number> {
@@ -72,7 +75,7 @@ export class Api {
   }
 
   // private method: use patch/post/delete instead
-  private async send(method: Method, query: string, params: ApiParams = {}): Promise<Response> {
+  private async send(method: Method, query: string, params: ApiParams = {}, init: ApiRequestInit = {}): Promise<Response> {
     const isFormData = params instanceof FormData;
 
 
@@ -105,8 +108,11 @@ export class Api {
     const options: RequestInit = {
       method: method,
       headers: headers,
-      keepalive: this.keepalive,
+      keepalive: init.keepalive ?? this.keepalive,
     };
+    if (init.signal) {
+      options.signal = init.signal;
+    }
 
     if ([Method.POST, Method.PATCH].includes(method)) {
       options.body = isFormData ? params : JSON.stringify(params);
@@ -118,6 +124,12 @@ export class Api {
     }
 
     return fetch(`api/v2/${query}${urlParams}`, options).then(async response => {
+      // the session is gone: init.inc.php answers with this header and an empty body
+      if (response.headers.get('X-Elab-Need-Auth') === '1') {
+        const error = new Error('Your session has expired.') as Error & { status?: number };
+        error.status = 401;
+        throw error;
+      }
       if (response.status !== this.getOkStatusFromMethod(method)) {
         return response.json().then(json => {
           const error = new Error(json.message || json.description) as Error & { status?: number };

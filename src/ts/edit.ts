@@ -22,9 +22,10 @@ import { entity } from './getEntity';
 import { on } from './handlers';
 
 // remove exclusive edit mode when leaving the page
+// keepalive only for this request: the user may cancel leaving the page (e.g. the whiteboard asks),
+// and keepalive requests are limited to 64 KB, which breaks bigger saves made afterwards
 window.onbeforeunload = function() {
-  ApiC.keepalive = true;
-  ApiC.patch(`${entity.type}/${entity.id}`, { notifOnSaved: 0, action: Action.RemoveExclusiveEditMode });
+  ApiC.patch(`${entity.type}/${entity.id}`, { notifOnSaved: 0, action: Action.RemoveExclusiveEditMode }, { keepalive: true });
 };
 // Which editor are we using? md or tiny
 const editor = getEditor();

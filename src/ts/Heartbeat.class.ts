@@ -11,6 +11,7 @@ import { ApiC } from './api';
 import { on } from './handlers';
 import { Model } from './interfaces';
 import { clearLocalStorage } from './localStorage';
+import { announceSessionExpired, reauthenticate } from './reauth';
 import i18next from './i18n';
 
 interface SessionStatus {
@@ -61,7 +62,7 @@ export default class Heartbeat {
       });
 
       if (response.status === 401) {
-        this.handleExpiredSession();
+        void this.handleExpiredSession();
         return;
       }
 
@@ -202,8 +203,15 @@ export default class Heartbeat {
     }
   }
 
-  private handleExpiredSession(): void {
+  private async handleExpiredSession(): Promise<void> {
     this.clearTimers();
+    // the session is gone but the "remember me" cookie may still log us back in, without losing the page
+    if (await reauthenticate()) {
+      void this.checkSession();
+      return;
+    }
+    // let components with unsaved work keep a local copy before leaving
+    await announceSessionExpired();
     clearLocalStorage();
     window.location.replace('login.php');
   }
