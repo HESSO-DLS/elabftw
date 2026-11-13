@@ -110,6 +110,13 @@ if (document.getElementById('excalidrawIframe')) {
   );
 }
 
+if (document.getElementById('logbookInstrument')) {
+  void import(
+    /* webpackChunkName: 'logbook-instrument' */
+    './logbook-instrument'
+  );
+}
+
 if (document.getElementById('logbookModal')) {
   void import(
     /* webpackChunkName: 'logbook' */

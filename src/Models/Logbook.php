@@ -16,29 +16,33 @@ use Elabftw\Enums\EntityType;
 use Elabftw\Enums\State;
 use Elabftw\Exceptions\ImproperActionException;
 use Elabftw\Interfaces\QueryParamsInterface;
+use Elabftw\Params\DisplayParams;
+use Elabftw\Services\LogbookRules;
 use Exception;
 use Override;
 use PDO;
+use Symfony\Component\HttpFoundation\InputBag;
 
+use function array_column;
+use function array_filter;
+use function array_map;
+use function array_values;
+use function implode;
 use function in_array;
 use function is_array;
-use function is_string;
-use function json_decode;
-use function mb_strtolower;
 use function sprintf;
-use function strtolower;
 use function trim;
+use function uasort;
 
 /**
- * Instrument logbook status of an experiment (read only)
- * An instrument (resource) needs a logbook entry when its "Logbook required" checkbox extra field is on.
- * A logbook entry is an experiment created from an experiment template linked to that instrument,
- * it links to the instrument (inherited from the template) and to the experiment it documents.
+ * Instrument logbook (read only), see Services/LogbookRules.php
+ * - experiments: the linked instruments that need a logbook and the entries for this experiment
+ * - items: the logbook of the instrument, all entries readable by the user
  */
 final class Logbook extends AbstractRest
 {
-    // name of the checkbox extra field on the instrument, compared case-insensitively
-    private const string REQUIRED_FIELD = 'logbook required';
+    // entries shown in the logbook of an instrument
+    private const int MAX_ENTRIES = 500;
 
     public function __construct(public AbstractEntity $Entity, ?int $id = null)
     {
@@ -60,16 +64,21 @@ final class Logbook extends AbstractRest
     #[Override]
     public function readAll(?QueryParamsInterface $queryParams = null): array
     {
-        if ($this->Entity->entityType !== EntityType::Experiments) {
-            throw new ImproperActionException('The logbook is only available for experiments.');
-        }
         $this->Entity->canOrExplode(AccessType::Read);
+        return match ($this->Entity->entityType) {
+            EntityType::Experiments => $this->readForExperiment(),
+            EntityType::Items => $this->readForInstrument(),
+            default => throw new ImproperActionException('The logbook is only available for experiments and resources.'),
+        };
+    }
 
+    private function readForExperiment(): array
+    {
         // a logbook entry itself links to the instrument: it never needs a logbook entry
         $createdFromId = $this->Entity->entityData['created_from_id'] ?? null;
         if (($this->Entity->entityData['created_from_type'] ?? null) === EntityType::Templates->toInt()
             && $createdFromId !== null
-            && $this->isLogbookTemplate((int) $createdFromId)
+            && LogbookRules::isLogbookTemplate((int) $createdFromId)
         ) {
             return array('is_logbook_entry' => true, 'instruments' => array());
         }
@@ -80,10 +89,40 @@ final class Logbook extends AbstractRest
                 'id' => (int) $instrument['id'],
                 'title' => $instrument['title'],
                 'templates' => $this->getTemplates((int) $instrument['id']),
-                'entries' => $this->getEntries((int) $instrument['id']),
+                'entries' => $this->getEntriesOfExperiment((int) $instrument['id']),
             );
         }
         return array('is_logbook_entry' => false, 'instruments' => $instruments);
+    }
+
+    private function readForInstrument(): array
+    {
+        $instrumentId = (int) $this->Entity->id;
+        if (!LogbookRules::isLogbookRequired($this->Entity->entityData['metadata'] ?? null)) {
+            return array('required' => false, 'templates' => array(), 'fields' => array(), 'entries' => array(), 'latest_status' => null);
+        }
+        $templates = $this->getTemplates($instrumentId);
+        $entries = $this->getEntriesOfInstrument($instrumentId);
+        $latest = null;
+        foreach ($entries as $entry) {
+            if ($entry['status'] !== null && $entry['status']['value'] !== '') {
+                $latest = array(
+                    'value' => $entry['status']['value'],
+                    'ready' => $entry['status']['ready'],
+                    'entry_id' => $entry['id'],
+                    'fullname' => $entry['fullname'],
+                    'created_at' => $entry['created_at'],
+                );
+                break;
+            }
+        }
+        return array(
+            'required' => true,
+            'templates' => array_map(fn(array $t): array => array('id' => $t['id'], 'title' => $t['title']), $templates),
+            'fields' => $this->getColumns($templates),
+            'entries' => $entries,
+            'latest_status' => $latest,
+        );
     }
 
     // linked resources of this experiment with the "Logbook required" checkbox on
@@ -97,50 +136,16 @@ final class Logbook extends AbstractRest
         $req->bindParam(':id', $this->Entity->id, PDO::PARAM_INT);
         $req->bindValue(':state', State::Normal->value, PDO::PARAM_INT);
         $this->Db->execute($req);
-        $res = array();
-        foreach ($req->fetchAll() as $row) {
-            if (self::isLogbookRequired($row['metadata'])) {
-                $res[] = $row;
-            }
-        }
-        return $res;
-    }
-
-    private static function isLogbookRequired(?string $metadata): bool
-    {
-        $decoded = json_decode($metadata ?? '', true);
-        if (!is_array($decoded) || !is_array($decoded['extra_fields'] ?? null)) {
-            return false;
-        }
-        foreach ($decoded['extra_fields'] as $name => $field) {
-            if (mb_strtolower(trim((string) $name)) !== self::REQUIRED_FIELD || !is_array($field)) {
-                continue;
-            }
-            $value = $field['value'] ?? null;
-            if ($value === true || $value === 1) {
-                return true;
-            }
-            return is_string($value) && in_array(strtolower(trim($value)), array('on', '1', 'true', 'yes'), true);
-        }
-        return false;
+        return array_values(array_filter($req->fetchAll(), fn(array $row): bool => LogbookRules::isLogbookRequired($row['metadata'])));
     }
 
     // experiment templates linked to the instrument that the user can read
     private function getTemplates(int $instrumentId): array
     {
-        $sql = 'SELECT experiments_templates.id
-            FROM experiments_templates2items
-            LEFT JOIN experiments_templates ON (experiments_templates.id = experiments_templates2items.item_id)
-            WHERE experiments_templates2items.link_id = :instrument AND experiments_templates.state = :state
-            ORDER BY experiments_templates.title';
-        $req = $this->Db->prepare($sql);
-        $req->bindParam(':instrument', $instrumentId, PDO::PARAM_INT);
-        $req->bindValue(':state', State::Normal->value, PDO::PARAM_INT);
-        $this->Db->execute($req);
         $res = array();
-        foreach ($req->fetchAll(PDO::FETCH_COLUMN) as $id) {
+        foreach (LogbookRules::getTemplateIds($instrumentId) as $id) {
             try {
-                $template = new Templates($this->Entity->Users, (int) $id)->readOne();
+                $template = new Templates($this->Entity->Users, $id)->readOne();
             } catch (Exception) {
                 continue;
             }
@@ -155,25 +160,25 @@ final class Logbook extends AbstractRest
         return $res;
     }
 
-    private function isLogbookTemplate(int $templateId): bool
+    // columns of the logbook table: the template fields, in the order of the form
+    private function getColumns(array $templates): array
     {
-        $sql = 'SELECT items.metadata
-            FROM experiments_templates2items
-            LEFT JOIN items ON (items.id = experiments_templates2items.link_id)
-            WHERE experiments_templates2items.item_id = :id';
-        $req = $this->Db->prepare($sql);
-        $req->bindParam(':id', $templateId, PDO::PARAM_INT);
-        $this->Db->execute($req);
-        foreach ($req->fetchAll(PDO::FETCH_COLUMN) as $metadata) {
-            if (self::isLogbookRequired($metadata)) {
-                return true;
+        $columns = array();
+        foreach ($templates as $template) {
+            $fields = LogbookRules::extraFields($template['metadata']);
+            uasort($fields, fn($a, $b): int => (int) ($a['position'] ?? 0) <=> (int) ($b['position'] ?? 0));
+            foreach ($fields as $name => $field) {
+                if (!is_array($field) || in_array((string) $name, array_column($columns, 'name'), true)) {
+                    continue;
+                }
+                $columns[] = array('name' => (string) $name, 'type' => $field['type'] ?? 'text');
             }
         }
-        return false;
+        return $columns;
     }
 
     // experiments linked to the instrument that link to this experiment, readable by the user
-    private function getEntries(int $instrumentId): array
+    private function getEntriesOfExperiment(int $instrumentId): array
     {
         $sql = 'SELECT DISTINCT e2e.item_id
             FROM experiments2experiments AS e2e
@@ -202,5 +207,114 @@ final class Logbook extends AbstractRest
             );
         }
         return $res;
+    }
+
+    // logbook entries of the instrument readable by the user, newest first
+    private function getEntriesOfInstrument(int $instrumentId): array
+    {
+        $templateIds = LogbookRules::getTemplateIds($instrumentId);
+        if ($templateIds === array()) {
+            return array();
+        }
+        // the usual list query applies the read permissions: experiments linked to the instrument, all scopes
+        $DisplayParams = new DisplayParams(
+            requester: $this->Entity->Users,
+            entityType: EntityType::Experiments,
+            query: new InputBag(array(
+                'related' => (string) $instrumentId,
+                'related_origin' => EntityType::Items->value,
+                'scope' => '3',
+                'limit' => (string) self::MAX_ENTRIES,
+            )),
+            limit: self::MAX_ENTRIES,
+            states: array(State::Normal, State::Archived),
+        );
+        $readable = array_map('intval', array_column(
+            new Experiments($this->Entity->Users)->readShow($DisplayParams),
+            'id',
+        ));
+        if ($readable === array()) {
+            return array();
+        }
+        $sql = sprintf('SELECT experiments.id, experiments.title, experiments.created_at, experiments.metadata,
+                CONCAT(users.firstname, " ", users.lastname) AS fullname, experiments.userid
+            FROM experiments
+            LEFT JOIN users ON (users.userid = experiments.userid)
+            WHERE experiments.id IN (%s) AND experiments.created_from_type = :type AND experiments.created_from_id IN (%s)
+            ORDER BY experiments.created_at DESC, experiments.id DESC',
+            implode(',', $readable),
+            implode(',', $templateIds),
+        );
+        $req = $this->Db->prepare($sql);
+        $req->bindValue(':type', EntityType::Templates->toInt(), PDO::PARAM_INT);
+        $this->Db->execute($req);
+        $rows = $req->fetchAll();
+
+        // titles of the experiments documented by the entries, if readable
+        $linkedIds = array();
+        foreach ($rows as $row) {
+            foreach (LogbookRules::extraFields($row['metadata']) as $field) {
+                if (is_array($field) && ($field['type'] ?? '') === 'experiments') {
+                    foreach ((array) ($field['value'] ?? array()) as $value) {
+                        if ((int) $value > 0) {
+                            $linkedIds[(int) $value] = true;
+                        }
+                    }
+                }
+            }
+        }
+        $linkedTitles = $this->getReadableTitles(array_keys($linkedIds));
+
+        $entries = array();
+        foreach ($rows as $row) {
+            $values = array();
+            $linked = array();
+            foreach (LogbookRules::extraFields($row['metadata']) as $name => $field) {
+                if (!is_array($field)) {
+                    continue;
+                }
+                $value = $field['value'] ?? '';
+                if (($field['type'] ?? '') === 'experiments') {
+                    foreach ((array) $value as $id) {
+                        if (isset($linkedTitles[(int) $id])) {
+                            $linked[] = array('id' => (int) $id, 'title' => $linkedTitles[(int) $id]);
+                        }
+                    }
+                    continue;
+                }
+                $value = is_array($value) ? implode(', ', $value) : trim((string) $value);
+                if ($value !== '' && !empty($field['unit'])) {
+                    $value .= ' ' . $field['unit'];
+                }
+                $values[(string) $name] = $value;
+            }
+            $entries[] = array(
+                'id' => (int) $row['id'],
+                'title' => $row['title'],
+                'created_at' => $row['created_at'],
+                'fullname' => $row['fullname'],
+                'userid' => (int) $row['userid'],
+                'linked' => $linked,
+                'status' => LogbookRules::getStatus($row['metadata']),
+                'values' => $values,
+            );
+        }
+        return $entries;
+    }
+
+    // id => title of the experiments the user can read
+    private function getReadableTitles(array $ids): array
+    {
+        $titles = array();
+        foreach ($ids as $id) {
+            try {
+                $Experiments = new Experiments($this->Entity->Users, (int) $id);
+                $Experiments->canOrExplode(AccessType::Read);
+                $titles[(int) $id] = $Experiments->entityData['title'] ?? ('#' . $id);
+            } catch (Exception) {
+                continue;
+            }
+        }
+        return $titles;
     }
 }

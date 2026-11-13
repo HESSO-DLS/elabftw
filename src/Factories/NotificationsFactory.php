@@ -21,6 +21,7 @@ use Elabftw\Interfaces\MailableInterface;
 use Elabftw\Models\Notifications\ActionRequested;
 use Elabftw\Models\Notifications\CommentCreated;
 use Elabftw\Models\Notifications\EventDeleted;
+use Elabftw\Models\Notifications\LogbookAlert;
 use Elabftw\Models\Notifications\OnboardingEmail;
 use Elabftw\Models\Notifications\SelfIsValidated;
 use Elabftw\Models\Notifications\SelfNeedValidation;
@@ -58,6 +59,7 @@ final class NotificationsFactory
             // note: not sure why the bypassReadPermission is necessary here...
             // note: here the team is not used, so just put 0 in the Users constructor
             Notifications::ActionRequested => new ActionRequested($this->targetUser, new Users($this->body['requester_userid']), RequestableAction::from($this->body['action_enum_value']), EntityType::from($this->body['entity_type_value'])->toInstance(new Users($this->body['requester_userid'], 0), $this->body['entity_id'], bypassReadPermission: true)),
+            Notifications::LogbookAlert => new LogbookAlert($this->targetUser, $this->body),
             default => throw new ImproperActionException(sprintf('This notification (%d) is not mailable.', $this->category)),
         };
     }

@@ -74,6 +74,7 @@ use Elabftw\Services\AdvancedSearchQuery;
 use Elabftw\Services\AdvancedSearchQuery\Visitors\VisitorParameters;
 use Elabftw\Services\Filter;
 use Elabftw\Services\HttpGetter;
+use Elabftw\Services\LogbookRules;
 use Elabftw\Services\SignatureHelper;
 use Elabftw\Services\TeamsHelper;
 use Elabftw\Traits\EntityTrait;
@@ -573,6 +574,13 @@ abstract class AbstractEntity extends AbstractRest
         // (sys)admin can remove locks
         // everyone can Pin, AccessKey, Bloxberg, Sign, Timestamp
         $this->ExclusiveEditMode->canPatchOrExplode($action);
+        // fork: instrument logbook, react to a changed status (Services/LogbookRules.php)
+        $logbookOldMetadata = null;
+        $logbookWatch = $this->entityType === EntityType::Experiments
+            && in_array($action, array(Action::Update, Action::UpdateMetadataField), true);
+        if ($logbookWatch) {
+            $logbookOldMetadata = $this->readColumn('metadata');
+        }
         match ($action) {
             Action::AccessKey => (new AccessKeyHelper($this->entityType, $this->id))->toggleAccessKey(),
             Action::Archive => (
@@ -656,6 +664,9 @@ abstract class AbstractEntity extends AbstractRest
             )(),
             default => throw new ImproperActionException('Invalid action parameter.'),
         };
+        if ($logbookWatch && $this->id !== null) {
+            LogbookRules::afterChange($this->Users, $this->id, $logbookOldMetadata);
+        }
         if ($this->readAfterPatch) {
             return $this->readOne();
         }
@@ -1141,6 +1152,10 @@ abstract class AbstractEntity extends AbstractRest
         }
         if ($copyFiles) {
             $sourceEntity->Uploads->duplicate($fresh);
+        }
+        // fork: instrument logbook, an entry created from a logbook template may report a status
+        if ($this->entityType === EntityType::Experiments && $fromTemplate) {
+            LogbookRules::afterChange($this->Users, $newId, null);
         }
         return $newId;
     }

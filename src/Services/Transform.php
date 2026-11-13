@@ -16,7 +16,9 @@ use Elabftw\Elabftw\App;
 use Elabftw\Elabftw\BuildInfo;
 use Elabftw\Enums\Notifications;
 use Elabftw\Exceptions\ImproperActionException;
+use Elabftw\Models\Notifications\LogbookAlert;
 
+use function htmlspecialchars;
 use function sprintf;
 use function _;
 
@@ -126,6 +128,14 @@ final class Transform
                         $notif['body']['requester_fullname'],
                         $notif['body']['action'],
                     ),
+                    $notif['created_at'],
+                ),
+            Notifications::LogbookAlert =>
+                sprintf(
+                    '<span data-action="ack-notif" data-id="%d" data-href="experiments.php?mode=view&amp;id=%d">%s</span>' . $relativeMoment,
+                    (int) $notif['id'],
+                    (int) $notif['body']['entry_id'],
+                    htmlspecialchars(LogbookAlert::getWebMessage($notif['body']), ENT_QUOTES),
                     $notif['created_at'],
                 ),
             default => throw new ImproperActionException('Invalid notification type.'),

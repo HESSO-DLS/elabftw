@@ -27,4 +27,6 @@ enum Notifications: int
     case NewVersionInstalled = 70;
     case OnboardingEmail = 80;
     case ActionRequested = 90;
+    // fork: instrument logbook
+    case LogbookAlert = 100;
 }

@@ -137,6 +137,9 @@
 </section>
 
 <hr>
+{% if Entity.entityType.value == 'items' %}
+  {% include 'logbook-instrument.html' %}
+{% endif %}
 {% include 'excalidraw-editor.html' with {readonly: Entity.entityData.locked == 1} %}
 
 {# EXTRA FIELDS #}

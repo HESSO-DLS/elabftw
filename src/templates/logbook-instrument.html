@@ -1,0 +1,30 @@
+{# logbook of an instrument (resource with the "Logbook required" checkbox), filled by logbook-instrument.ts #}
+<section id='logbookInstrument' class='logbook-instrument' aria-label='{{ 'Logbook'|trans }}' hidden>
+  <h3 data-action='toggle-next' data-scroll-btn='fa-clipboard-list' data-scroll-btn-label='{{ 'Logbook'|trans }}' data-opened-icon='fa-caret-down' data-closed-icon='fa-caret-right' class='d-inline togglable-section-title mt-2' tabindex='0' role='button' aria-expanded='true' aria-controls='logbookInstrumentBody'>
+    <i class='fas fa-caret-down fa-fw mr-2'></i>{{ 'Logbook'|trans }} (<span id='logbookCount'>0</span>)
+  </h3>
+  <div id='logbookInstrumentBody' class='m-2'>
+    <div id='logbookStatusBanner' class='logbook-status-banner' role='status' hidden></div>
+    <div class='d-flex flex-wrap align-items-center mb-2 logbook-toolbar'>
+      <select id='logbookStatusFilter' class='form-control form-control-sm mr-2 mb-1' aria-label='{{ 'Filter by status'|trans }}'>
+        <option value='all'>{{ 'All entries'|trans }}</option>
+        <option value='attention'>{{ 'Needs attention'|trans }}</option>
+        <option value='ready'>{{ 'Ready'|trans }}</option>
+      </select>
+      <input id='logbookSearch' type='search' class='form-control form-control-sm mr-auto mb-1' placeholder='{{ 'Filter entries'|trans }}' aria-label='{{ 'Filter entries'|trans }}'>
+      <a id='logbookShowList' class='btn btn-sm btn-ghost mb-1' href='#'><i class='fas fa-list fa-fw mr-1' aria-hidden='true'></i>{{ 'Show in experiments list'|trans }}</a>
+      <button type='button' id='logbookExport' class='btn btn-sm btn-ghost mb-1'><i class='fas fa-file-csv fa-fw mr-1' aria-hidden='true'></i>{{ 'Export CSV'|trans }}</button>
+      <div class='btn-group mb-1 ml-1'>
+        <button type='button' id='logbookNewEntry' class='btn btn-sm btn-primary'><i class='fas fa-plus fa-fw mr-1' aria-hidden='true'></i>{{ 'New entry'|trans }}</button>
+      </div>
+    </div>
+    <div class='table-responsive logbook-table-wrapper'>
+      <table class='table table-sm table-hover logbook-table mb-1'>
+        <thead id='logbookHead'></thead>
+        <tbody id='logbookBody'></tbody>
+      </table>
+    </div>
+    <p id='logbookEmpty' class='text-muted small' hidden>{{ 'No logbook entries yet.'|trans }}</p>
+  </div>
+  <hr>
+</section>
